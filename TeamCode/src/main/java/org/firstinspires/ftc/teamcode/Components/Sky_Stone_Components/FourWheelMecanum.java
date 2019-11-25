@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcontroller.internal.Core.RobotComponent;
 import org.firstinspires.ftc.robotcontroller.internal.Core.Sensors.REVIMU;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class FourWheelMecanum extends RobotComponent {
 
@@ -80,6 +81,7 @@ public class FourWheelMecanum extends RobotComponent {
 
         setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        setZeroPowerBehaviors(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void robotRelativeDrive(double forward, double right, double turn){
@@ -194,6 +196,11 @@ public class FourWheelMecanum extends RobotComponent {
             motor.setMode(runMode);
         }
     }
+    public void setZeroPowerBehaviors(DcMotor.ZeroPowerBehavior behavior){
+        for (DcMotor motor: motors){
+            motor.setZeroPowerBehavior(behavior);
+        }
+    }
 
     private double getProcessedInput(double hardInput){
         hardInput = Range.clip(hardInput, -1, 1);
@@ -288,7 +295,7 @@ public class FourWheelMecanum extends RobotComponent {
         private double acceleration = 0.25;
         private double minimumPower = 0.2;
 
-        private ArrayList<DcMotor> usedMotors = new ArrayList<DcMotor>();
+        private ArrayList<DcMotor> usedMotors = new ArrayList<>();
 
         public void setDriveTarget(double distance, FourWheelMecanum.Direction d, double time){
 

@@ -4,6 +4,7 @@ import android.drm.DrmInfoEvent;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomTensorFlowSkyStone;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -33,7 +34,6 @@ public class RedStone extends LinearOpMode {
         vision = new CustomTensorFlowSkyStone(hardwareMap);
 
         waitForStart();
-
 
         //reads current vision input
         stones = vision.getObjects();
@@ -107,7 +107,7 @@ public class RedStone extends LinearOpMode {
         base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 25, 4);
 
         //releases second block
-        base.collector.spew(-1);
+        base.collector.spew(1);
         sleep(600);
 
         base.collector.stop();
