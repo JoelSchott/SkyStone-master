@@ -7,6 +7,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CustomTensorFlowSkyStone {
@@ -50,6 +52,10 @@ public class CustomTensorFlowSkyStone {
      */
     private TFObjectDetector tfod;
 
+    public enum SkyStonePosition{
+        LEFT,MIDDLE,RIGHT,UNKNOWN
+    }
+
     public void init(){
 
         initVuforia();
@@ -77,6 +83,44 @@ public class CustomTensorFlowSkyStone {
             }
         }
         return null;
+    }
+
+    public static SkyStonePosition getPosition(List<Recognition> stones){
+        SkyStonePosition position = SkyStonePosition.UNKNOWN;
+        ArrayList<Recognition> skystones = new ArrayList<>();
+        Iterator iterator = stones.iterator();
+        while (iterator.hasNext()){
+            Recognition stone = (Recognition)iterator.next();
+            if (stone.getLabel().equals("Skystone")){
+                skystones.add(stone);
+                stones.remove(stone);
+            }
+        }
+        if (skystones.size() == 1 && stones.size() == 2){
+            if (skystones.get(0).getRight() > stones.get(0).getRight() && skystones.get(0).getRight() > stones.get(1).getRight()){
+                position = SkyStonePosition.RIGHT;
+            }
+            else if (skystones.get(0).getRight() < stones.get(0).getRight() && skystones.get(0).getRight() < stones.get(1).getRight()){
+                position = SkyStonePosition.LEFT;
+            }
+            else{
+                position = SkyStonePosition.MIDDLE;
+            }
+        }
+        else if (skystones.size() == 1){
+            if (skystones.get(0).getLeft() > 293 || skystones.get(0).getRight() > 540){
+                position = SkyStonePosition.RIGHT;
+            }
+            else if (skystones.get(0).getLeft() < 102 || skystones.get(0).getRight() <  344){
+                position = SkyStonePosition.LEFT;
+            }
+            else{
+                position = SkyStonePosition.MIDDLE;
+            }
+        }
+
+
+        return position;
     }
 
     public void shutdown(){

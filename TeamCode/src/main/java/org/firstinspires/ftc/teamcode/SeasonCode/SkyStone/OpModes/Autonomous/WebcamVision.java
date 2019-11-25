@@ -37,8 +37,19 @@ public class WebcamVision extends LinearOpMode {
                         telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
                                 object.getRight(), object.getBottom());
                     }
-
                 }
+                for (Recognition object : objects){
+                    if (!object.getLabel().equals("Skystone")){
+                        telemetry.addData("Label is ", object.getLabel());
+                        telemetry.addData("Confidence is ", object.getConfidence());
+                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                object.getLeft(), object.getTop());
+                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                object.getRight(), object.getBottom());
+                    }
+                }
+                telemetry.addData("Conclusion is ", CustomTensorFlowSkyStone.getPosition(objects));
+
             }
             telemetry.update();
         }
