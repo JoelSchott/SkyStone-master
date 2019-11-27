@@ -12,9 +12,13 @@ public class MainTeleOp extends LinearOpMode {
 
     DrivetrainState driveState = DrivetrainState.ROBOT_RELATIVE;
 
+    private boolean clamped = false;
+
     enum DrivetrainState{
         ROBOT_RELATIVE,FIELD_RELATIVE
     }
+
+
 
     @Override
     public void runOpMode(){
@@ -27,6 +31,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
+
 
         while (opModeIsActive()){
 
@@ -56,8 +61,25 @@ public class MainTeleOp extends LinearOpMode {
 
 
             //------------------------------------COLLECTING-------------------------------------------------------------
+            if (gamepad2.a){
+                base.collector.collect(1);
+            }
+            else if (gamepad2.b){
+                base.collector.spew(1);
+            }
+            else{
+                base.collector.stop();
+            }
 
 
+            //------------------------------------OUTTAKE-------------------------------------------------------------
+
+            if (gamepad2.x){
+                base.output.clampGrab();
+            }
+            if (gamepad2.x){
+                base.output.clampRelease();
+            }
 
             //------------------------------------TELEMETRY--------------------------------------------------------
 

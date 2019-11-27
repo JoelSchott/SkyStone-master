@@ -27,10 +27,10 @@ public class FourWheelMecanum extends RobotComponent {
     private double stopBuffer = 0.05;
 
 
-    static final double COUNTS_PER_REVOLUTION = 801.7;
-    static final double WHEEL_REVOLUTIONS_PER_MOTOR_REVOLUTION = 0.5;
-    static final double WHEEL_DIAMETER = 4;
-    static final double COUNTS_PER_INCH = (COUNTS_PER_REVOLUTION / (WHEEL_REVOLUTIONS_PER_MOTOR_REVOLUTION * WHEEL_DIAMETER * 3.1416));
+//    static final double COUNTS_PER_REVOLUTION = 801.7;
+//    static final double WHEEL_REVOLUTIONS_PER_MOTOR_REVOLUTION = 0.5;
+//    static final double WHEEL_DIAMETER = 4;
+    static final double COUNTS_PER_INCH = 85.9;
     static final double ROBOT_RADIUS = 5;
 
     public AutoDrive autoDrive = new AutoDrive();

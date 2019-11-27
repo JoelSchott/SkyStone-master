@@ -11,16 +11,18 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.Collector;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.Foundation;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
+import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.Output;
 
 public class MainBase extends RobotBase {
 
     public FourWheelMecanum drivetrain;
     public Foundation foundation;
     public Collector collector;
+    public Output output;
 
     public REVIMU imu;
 
-    private RobotComponent[] components = new RobotComponent[3];
+    private RobotComponent[] components = new RobotComponent[4];
 
     public MainBase(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode mode){
 
@@ -57,6 +59,11 @@ public class MainBase extends RobotBase {
         collector = new Collector(this);
         components [2] = collector;
         telemetry.addLine("created collector");
+        telemetry.update();
+
+        output = new Output(this);
+        components[3] = output;
+        telemetry.addLine("created output");
         telemetry.update();
     }
 

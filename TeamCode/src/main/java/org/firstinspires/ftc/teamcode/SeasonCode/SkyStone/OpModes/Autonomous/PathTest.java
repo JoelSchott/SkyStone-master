@@ -4,9 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
 
-@Autonomous (name = "Simple Test Auto")
+@Autonomous (name = "Test Auto")
 public class PathTest extends LinearOpMode {
 
     MainBase base;
@@ -32,7 +33,7 @@ public class PathTest extends LinearOpMode {
 
         waitForStart();
 
-        base.drivetrain.encoderDrive(DRIVE_SPEED, distance,distance,distance,distance, 6);
+        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, distance, 6);
 
         telemetry.addLine(distance + " inches");
         telemetry.addData("front left encoder is ", base.drivetrain.frontLeft.getCurrentPosition());
@@ -42,6 +43,8 @@ public class PathTest extends LinearOpMode {
         double averageEncoders = (double)(base.drivetrain.frontLeft.getCurrentPosition() + base.drivetrain.frontRight.getCurrentPosition() +
                 base.drivetrain.backRight.getCurrentPosition() + base.drivetrain.backLeft.getCurrentPosition())/4.0;
         telemetry.addData("average encoders are ", averageEncoders);
+        telemetry.update();
+        sleep(30000);
 
     }
 
