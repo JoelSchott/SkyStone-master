@@ -13,6 +13,7 @@ public class MainTeleOp extends LinearOpMode {
     DrivetrainState driveState = DrivetrainState.ROBOT_RELATIVE;
 
     private boolean clamped = false;
+    private boolean clampButtonHeld = false;
 
     enum DrivetrainState{
         ROBOT_RELATIVE,FIELD_RELATIVE
@@ -73,13 +74,21 @@ public class MainTeleOp extends LinearOpMode {
 
 
             //------------------------------------OUTTAKE-------------------------------------------------------------
+            if (gamepad2.x && !clampButtonHeld){
+                clampButtonHeld = true;
+                if (clamped){
+                    base.output.clampRelease();
+                    clamped = false;
+                }
+                else{
+                    base.output.clampGrab();
+                    clamped = true;
+                }
+            }
+            if (!gamepad2.x){
+                clampButtonHeld = false;
+            }
 
-            if (gamepad2.x){
-                base.output.clampGrab();
-            }
-            if (gamepad2.x){
-                base.output.clampRelease();
-            }
 
             //------------------------------------TELEMETRY--------------------------------------------------------
 
