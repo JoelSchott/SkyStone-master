@@ -25,6 +25,9 @@ public class RedStone extends LinearOpMode {
     private final static double DRIVE_SPEED = 1.0;
     private final static double TURN_SPEED = 0.6;
 
+    private double bridgeDistance = 44;
+    private double depositTurn = Math.PI * 1.8;
+
     @Override
     public void runOpMode(){
 
@@ -49,7 +52,7 @@ public class RedStone extends LinearOpMode {
         telemetry.update();
 
         //strafes right and knocks stones out of the way
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 40, 6);
+        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 34, 6);
 
         //starts collecting
         base.collector.collect(0.8);
@@ -63,13 +66,13 @@ public class RedStone extends LinearOpMode {
         base.collector.stop();
 
         //goes left to prepare to go under bridge
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 20, 5);
+        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 27, 5);
 
         //drives under bridge
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 40, 9);
+        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, bridgeDistance, 9);
 
         //turns right pi/2 radians
-        base.drivetrain.encoderTurn(TURN_SPEED, Math.PI, 4);
+        base.drivetrain.encoderTurn(TURN_SPEED, depositTurn, 4);
 
         //spits out block
         base.collector.spew(1);
@@ -79,13 +82,13 @@ public class RedStone extends LinearOpMode {
         base.collector.stop();
 
         //turns back
-        base.drivetrain.encoderTurn(TURN_SPEED, -Math.PI, 4);
+        base.drivetrain.encoderTurn(TURN_SPEED, -depositTurn, 4);
 
         //drives to second skystone
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 48, 9);
+        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, bridgeDistance + 30, 9);
 
         //strafes right to get in front of block
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 20, 6);
+        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD_RIGHT, 22, 6);
 
         //starts collecting
         base.collector.collect(1);
@@ -98,13 +101,13 @@ public class RedStone extends LinearOpMode {
         base.collector.stop();
 
         //goes left to prepare to go under bridge
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 15, 5);
-
-        //turns around
-        base.drivetrain.encoderTurn(TURN_SPEED, Math.PI*2, 3);
+        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 30, 5);
 
         //drives to park on line
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 25, 4);
+        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 30, 4);
+
+        //turns around
+        base.drivetrain.encoderTurn(TURN_SPEED, Math.PI*3, 3);
 
         //releases second block
         base.collector.spew(1);

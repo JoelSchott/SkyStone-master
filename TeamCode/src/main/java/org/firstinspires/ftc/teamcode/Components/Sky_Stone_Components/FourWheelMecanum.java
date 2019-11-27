@@ -31,7 +31,7 @@ public class FourWheelMecanum extends RobotComponent {
 //    static final double WHEEL_REVOLUTIONS_PER_MOTOR_REVOLUTION = 0.5;
 //    static final double WHEEL_DIAMETER = 4;
     static final double COUNTS_PER_INCH = 85.9;
-    static final double ROBOT_RADIUS = 5;
+    static final double ROBOT_RADIUS = 14.5;
 
     public AutoDrive autoDrive = new AutoDrive();
     public AutoTurn autoTurn = new AutoTurn();
@@ -230,6 +230,7 @@ public class FourWheelMecanum extends RobotComponent {
             encoderDrive(speed, 0, distance, distance, 0, timeOut);
         }
         else if (direction == Direction.LEFT){
+            distance = distance * 1.4142;
             encoderDrive(speed, -distance, distance, distance, -distance, timeOut);
         }
         else if (direction == Direction.BACK_LEFT){
@@ -242,6 +243,7 @@ public class FourWheelMecanum extends RobotComponent {
             encoderDrive(speed, 0, -distance, -distance, 0, timeOut);
         }
         else if (direction == Direction.RIGHT){
+            distance = distance * 1.4142;
             encoderDrive(speed, distance, -distance, -distance, distance, timeOut);
         }
         else if (direction == Direction.FORWARD_RIGHT){

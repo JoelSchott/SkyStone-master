@@ -15,7 +15,7 @@ public class PathTest extends LinearOpMode {
     static final double DRIVE_SPEED = 1;
     static final double TURN_SPEED = 0.4;
 
-    private double distance = 12;
+    private double distance = 48;
 
     @Override
     public void runOpMode(){
@@ -33,8 +33,9 @@ public class PathTest extends LinearOpMode {
 
         waitForStart();
 
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, distance, 6);
+        base.drivetrain.encoderTurn(0.6, 2*Math.PI, 6);
 
+        telemetry.clear();
         telemetry.addLine(distance + " inches");
         telemetry.addData("front left encoder is ", base.drivetrain.frontLeft.getCurrentPosition());
         telemetry.addData("front right encoder is ", base.drivetrain.frontRight.getCurrentPosition());
