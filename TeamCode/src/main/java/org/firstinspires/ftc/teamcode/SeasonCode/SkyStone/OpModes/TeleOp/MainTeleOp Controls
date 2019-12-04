@@ -1,4 +1,43 @@
-Gamepad 1
+Gamepad 1---------------------------------------------------------------------------
 
-left joystick - forward/backward/left/right
-right joystick - turning
+left joystick y --------- driving forward/backward
+left joystick x --------- strafing left/right
+left joystick button ----
+right joystick y --------
+right joystick x -------- left is turning counterclockwise, right is turning clockwise
+right joystick button ---
+a ----------------------- switches to robot-relative drive
+b ----------------------- switches to field-relative drive
+x -----------------------
+y -----------------------
+left bumper (higher up) -
+right bumper (higher up)-
+left trigger ------------
+right trigger -----------
+D-pad left --------------
+D-pad bottom ------------
+D-pad right -------------
+D-pad top ---------------
+
+
+Gamepad 2---------------------------------------------------------------------------
+
+left joystick y ---------- foundation mover
+left joystick x ---------
+left joystick button ----
+right joystick y --------
+right joystick x -------- rotating block in/out
+right joystick button ---
+a  ---------------------- collects
+b  ---------------------- spews
+x  ---------------------- clamp of block
+y -----------------------
+left bumper (higher up) - capstone servo back in
+right bumper (higher up)- placing capstone
+left trigger ------------
+right trigger -----------
+D-pad left --------------
+D-pad bottom ------------ lift down
+D-pad right -------------
+D-pad top --------------- lift up
+

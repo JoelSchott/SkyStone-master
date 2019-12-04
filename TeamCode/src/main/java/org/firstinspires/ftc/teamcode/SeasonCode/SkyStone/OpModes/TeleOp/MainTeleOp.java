@@ -20,7 +20,6 @@ public class MainTeleOp extends LinearOpMode {
     }
 
 
-
     @Override
     public void runOpMode(){
 
@@ -35,7 +34,6 @@ public class MainTeleOp extends LinearOpMode {
 
 
         while (opModeIsActive()){
-
 
             //------------------------------------DRIVING-----------------------------------------------------
 
@@ -57,8 +55,8 @@ public class MainTeleOp extends LinearOpMode {
             }
 
             //--------------------------------------FOUNDATION MOVING----------------------------------------------
-            base.foundation.setLeftPower(gamepad2.left_stick_y);
-            base.foundation.setRightPower(gamepad2.right_stick_y);
+            base.foundation.moveServo(gamepad2.left_stick_y);
+
 
 
             //------------------------------------COLLECTING-------------------------------------------------------------
@@ -73,7 +71,8 @@ public class MainTeleOp extends LinearOpMode {
             }
 
 
-            //------------------------------------OUTTAKE-------------------------------------------------------------
+            //------------------------------------OUTPUT-------------------------------------------------------------
+            //-----------CLAMP------------------
             if (gamepad2.x && !clampButtonHeld){
                 clampButtonHeld = true;
                 if (clamped){
@@ -88,6 +87,28 @@ public class MainTeleOp extends LinearOpMode {
             if (!gamepad2.x){
                 clampButtonHeld = false;
             }
+            //---------LIFT----------------------
+
+            if (gamepad2.dpad_up){
+                base.output.liftUp(1);
+            }
+            else if (gamepad2.dpad_down){
+                base.output.liftDown(1);
+            }
+            else{
+                base.output.lift.setPower(0);
+            }
+
+            //----------ROTATION------------------
+            base.output.blockRotator.setPower(gamepad2.right_stick_x);
+
+            //----------CAPSTONE-----------------
+            if (gamepad2.right_bumper){
+                base.output.placeMarker();
+            }
+            else if (gamepad2.left_bumper){
+                base.output.retractMarker();
+            }
 
 
             //------------------------------------TELEMETRY--------------------------------------------------------
@@ -96,7 +117,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("Y angle is ", base.imu.yAngle());
             telemetry.addData("Z angle is", base.imu.zAngle());
 
-            telemetry.addData("Processed angle is ", base.drivetrain.getProcessedAngle(base.imu.zAngle()));
+            telemetry.addData("Processed angle is ", base.drivetrain.getProcessedAngle(0));
             telemetry.addData("Drive state is ", driveState);
 
             telemetry.addData("Driving with power ", gamepad1.left_stick_y);

@@ -7,25 +7,22 @@ import org.firstinspires.ftc.robotcontroller.internal.Core.RobotBase;
 import org.firstinspires.ftc.robotcontroller.internal.Core.RobotComponent;
 
 public class Foundation extends RobotComponent {
-    public CRServo leftServo;
-    public CRServo rightServo;
+    public CRServo foundationServo;
+
 
     public Foundation(RobotBase base){
         super(base);
-        leftServo = base().getMapper().mapCRServo("leftServo", CRServo.Direction.FORWARD);
-        rightServo = base().getMapper().mapCRServo("rightServo", CRServo.Direction.REVERSE);
+        foundationServo = base().getMapper().mapCRServo("foundation", CRServo.Direction.FORWARD);
     }
 
-    public void setLeftPower(double power){
-        leftServo.setPower(power);
+    public void moveServo(double power){
+
+        foundationServo.setPower(power);
     }
-    public void setRightPower(double power){
-        rightServo.setPower(power);
-    }
+
 
     public void stop(){
-        leftServo.setPower(0);
-        rightServo.setPower(0);
+        foundationServo.setPower(0);
     }
 
 }
