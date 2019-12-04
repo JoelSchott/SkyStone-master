@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous;
+package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Competition;
 
 import android.drm.DrmInfoEvent;
 

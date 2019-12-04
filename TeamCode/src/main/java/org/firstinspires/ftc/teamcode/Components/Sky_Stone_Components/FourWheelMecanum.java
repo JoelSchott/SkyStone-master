@@ -14,8 +14,6 @@ import java.util.Collection;
 
 public class FourWheelMecanum extends RobotComponent {
 
-
-    public int mynum;
     public DcMotor frontLeft;
     public DcMotor backLeft;
     public DcMotor frontRight;
@@ -97,7 +95,6 @@ public class FourWheelMecanum extends RobotComponent {
         double relativeRight = (Math.sin(angle)*right) - (Math.cos(angle)*forward);
 
         drive(relativeForward, relativeRight, turn);
-
     }
 
 

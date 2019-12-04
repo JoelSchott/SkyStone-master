@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.SubsidiaryProjects;
+package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.SubsidiaryProjects.Training;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;

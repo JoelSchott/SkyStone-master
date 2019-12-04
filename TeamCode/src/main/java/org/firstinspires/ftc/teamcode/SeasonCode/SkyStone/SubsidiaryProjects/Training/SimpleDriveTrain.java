@@ -1,10 +1,6 @@
-package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.SubsidiaryProjects;
+package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.SubsidiaryProjects.Training;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 //@TeleOp(name = "Simple Drive Train", group = "TeleOp")
 
