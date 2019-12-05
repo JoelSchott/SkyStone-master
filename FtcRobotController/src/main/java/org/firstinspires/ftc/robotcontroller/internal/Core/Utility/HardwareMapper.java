@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.robotcontroller.internal.Core.Utility;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
@@ -105,6 +107,13 @@ public final class HardwareMapper
         tempColor = robot.getHardwareMap().get(ColorSensor.class, NAME);
 
         return tempColor;
+    }
+    public GyroSensor mapMRGyro(final String NAME){
+        GyroSensor tempGyro;
+
+        tempGyro = robot.getHardwareMap().gyroSensor.get(NAME);
+
+        return tempGyro;
     }
 
     public DigitalChannel mapDigitalChannel(final String NAME){

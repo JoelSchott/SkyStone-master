@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.TeleOp;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -31,6 +32,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.clear();
         telemetry.addLine("All Systems Go");
         telemetry.update();
+
 
         waitForStart();
 
@@ -120,7 +122,7 @@ public class MainTeleOp extends LinearOpMode {
             //------------------------------------TELEMETRY--------------------------------------------------------
 
             telemetry.addData("Gyro Angle is ", base.gyro.heading());
-            telemetry.addData("used angle is ", base.drivetrain.getProcessedAngle());
+            telemetry.addData("Processed angle is", base.drivetrain.getProcessedAngle());
             telemetry.addData("Drive state is ", driveState);
             telemetry.addLine();
             telemetry.addData("Front Left drivetrain ", base.drivetrain.frontLeft.getCurrentPosition());

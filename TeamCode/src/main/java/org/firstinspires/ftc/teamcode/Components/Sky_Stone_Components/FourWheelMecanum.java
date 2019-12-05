@@ -224,7 +224,7 @@ public class FourWheelMecanum extends RobotComponent {
     }
     public void gyroTurn(double speed, double targetDegrees, double timeOut){
         runTime.reset();
-        
+
     }
 
     public void encoderDrive(double speed, Direction direction, double distance, double timeOut){

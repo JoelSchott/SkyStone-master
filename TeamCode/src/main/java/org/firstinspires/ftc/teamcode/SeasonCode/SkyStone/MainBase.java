@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.RobotBase;
@@ -50,7 +51,7 @@ public class MainBase extends RobotBase {
         telemetry.addLine("created imu");
         telemetry.update();
 
-        gyro = new MRGyro(this, "gyro");
+        gyro = new MRGyro(this,"gyro");
         telemetry.addLine("created gyro");
         telemetry.update();
 
@@ -58,7 +59,7 @@ public class MainBase extends RobotBase {
         telemetry.addLine("Made front range");
         telemetry.update();
 
-        drivetrain = new FourWheelMecanum(this, imu);
+        drivetrain = new FourWheelMecanum(this, imu, gyro);
         components[0] = drivetrain;
         telemetry.addLine("created drivetrain");
         telemetry.update();
