@@ -15,6 +15,8 @@ public class MainTeleOp extends LinearOpMode {
     private boolean clamped = false;
     private boolean clampButtonHeld = false;
 
+    private int debugClampCount = 0;
+
     enum DrivetrainState{
         ROBOT_RELATIVE,FIELD_RELATIVE
     }
@@ -82,6 +84,7 @@ public class MainTeleOp extends LinearOpMode {
                 else{
                     base.output.clampGrab();
                     clamped = true;
+                    debugClampCount++;
                 }
             }
             if (!gamepad2.x){
@@ -89,18 +92,21 @@ public class MainTeleOp extends LinearOpMode {
             }
             //---------LIFT----------------------
 
-            if (gamepad2.dpad_up){
-                base.output.liftUp(1);
-            }
-            else if (gamepad2.dpad_down){
-                base.output.liftDown(1);
+            if (Math.abs(gamepad2.right_stick_y) > 0.1){
+                base.output.lift.setPower(-gamepad2.right_stick_y);
             }
             else{
                 base.output.lift.setPower(0);
             }
 
             //----------ROTATION------------------
-            base.output.blockRotator.setPower(gamepad2.right_stick_x);
+            if (gamepad2.dpad_left){
+                base.output.inRotate(0);
+            }
+            else if (gamepad2.dpad_right){
+                base.output.outRotate(0);
+            }
+
 
             //----------CAPSTONE-----------------
             if (gamepad2.right_bumper){
@@ -113,20 +119,18 @@ public class MainTeleOp extends LinearOpMode {
 
             //------------------------------------TELEMETRY--------------------------------------------------------
 
-            telemetry.addData("X angle is ", base.imu.xAngle());
-            telemetry.addData("Y angle is ", base.imu.yAngle());
-            telemetry.addData("Z angle is", base.imu.zAngle());
-
-            telemetry.addData("Processed angle is ", base.drivetrain.getProcessedAngle(0));
+            telemetry.addData("Gyro Angle is ", base.gyro.heading());
+            telemetry.addData("used angle is ", base.drivetrain.getProcessedAngle());
             telemetry.addData("Drive state is ", driveState);
-
-            telemetry.addData("Driving with power ", gamepad1.left_stick_y);
-
+            telemetry.addLine();
             telemetry.addData("Front Left drivetrain ", base.drivetrain.frontLeft.getCurrentPosition());
             telemetry.addData("Front Right drivetrain ", base.drivetrain.frontRight.getCurrentPosition());
             telemetry.addData("Back Left drivetrain ", base.drivetrain.backLeft.getCurrentPosition());
             telemetry.addData("Back Right drivetrain ", base.drivetrain.backRight.getCurrentPosition());
-
+            telemetry.addLine();
+            telemetry.addData("marker position is trying to be ", base.output.marker.getPosition());
+            telemetry.addData("clamp position is trying to be ", base.output.clamp.getPosition());
+            telemetry.addData("debug clamp count is ", debugClampCount);
 
             telemetry.update();
 

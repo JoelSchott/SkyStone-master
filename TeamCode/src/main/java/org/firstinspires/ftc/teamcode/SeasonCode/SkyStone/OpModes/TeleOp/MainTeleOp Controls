@@ -25,8 +25,8 @@ Gamepad 2-----------------------------------------------------------------------
 left joystick y ---------- foundation mover
 left joystick x ---------
 left joystick button ----
-right joystick y --------
-right joystick x -------- rotating block in/out
+right joystick y -------- lift up / down
+right joystick x --------
 right joystick button ---
 a  ---------------------- collects
 b  ---------------------- spews
@@ -36,8 +36,8 @@ left bumper (higher up) - capstone servo back in
 right bumper (higher up)- placing capstone
 left trigger ------------
 right trigger -----------
-D-pad left --------------
-D-pad bottom ------------ lift down
-D-pad right -------------
-D-pad top --------------- lift up
+D-pad left -------------- rotator in
+D-pad bottom ------------
+D-pad right ------------- rotator out
+D-pad top ---------------
 

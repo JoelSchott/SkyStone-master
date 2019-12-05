@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Te
 import com.qualcomm.hardware.adafruit.AdafruitBNO055IMU;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.Sensors.MRRange;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+@Autonomous(name = "Sensor Test")
 public class SensorTest extends LinearOpMode {
 
     private BNO055IMU IMUsensor;

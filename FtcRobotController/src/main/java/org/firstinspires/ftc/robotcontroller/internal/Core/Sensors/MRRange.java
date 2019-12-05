@@ -38,6 +38,13 @@ public final class MRRange extends RobotSensor
         return distance;
     }
 
+    public double customDistanceInInches(){
+        double distance = range.getDistance(DistanceUnit.INCH);
+        distance *= 0.9183;
+        distance += 0.57482;
+        return distance;
+    }
+
 
 
 

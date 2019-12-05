@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.RobotBase;
 import org.firstinspires.ftc.robotcontroller.internal.Core.RobotComponent;
+import org.firstinspires.ftc.robotcontroller.internal.Core.Sensors.MRGyro;
 import org.firstinspires.ftc.robotcontroller.internal.Core.Sensors.REVIMU;
 
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class FourWheelMecanum extends RobotComponent {
     public DcMotor[] motors = new DcMotor[4];
 
     private REVIMU imu;
+    private MRGyro gyro;
 
     private double stopBuffer = 0.05;
 
@@ -36,7 +38,7 @@ public class FourWheelMecanum extends RobotComponent {
 
     private ElapsedTime runTime = new ElapsedTime();
 
-    double initialAngle = 0;
+    double initialAngle = 180;
 
     public enum Direction{
         FORWARD, FORWARD_RIGHT, RIGHT, BACK_RIGHT, BACK, BACK_LEFT, LEFT, FORWARD_LEFT
@@ -66,6 +68,13 @@ public class FourWheelMecanum extends RobotComponent {
         initMotors();
     }
 
+    public FourWheelMecanum(final RobotBase BASE, REVIMU IMU, MRGyro GYRO){
+        super(BASE);
+        imu = IMU;
+        gyro = GYRO;
+        initMotors();
+    }
+
     private void initMotors(){
 
         frontLeft = base().getMapper().mapMotor("frontLeft", DcMotorSimple.Direction.REVERSE);
@@ -88,7 +97,7 @@ public class FourWheelMecanum extends RobotComponent {
 
     public void fieldRelativeDrive(double forward, double right, double turn){
 
-        double angle = getProcessedAngle(initialAngle);
+        double angle = getProcessedAngle();
         angle = Math.toRadians(angle);
 
         double relativeForward = (Math.cos(angle)*right) + (Math.sin(angle)*forward);
@@ -205,18 +214,17 @@ public class FourWheelMecanum extends RobotComponent {
         return hardInput;
     }
 
-    public double getProcessedAngle(double addition){
-        double angle = imu.yAngle() + addition;
-        while (angle < 0){
-            angle += 360;
-        }
-        angle = angle%360;
-        return angle;
+    public double getProcessedAngle(){
+        return gyro.heading() + initialAngle;
     }
 
     public void encoderTurn(double speed, double radians, double timeOut){
         double distance = radians * ROBOT_RADIUS;
         encoderDrive(speed, distance, distance, -distance, -distance, timeOut);
+    }
+    public void gyroTurn(double speed, double targetDegrees, double timeOut){
+        runTime.reset();
+        
     }
 
     public void encoderDrive(double speed, Direction direction, double distance, double timeOut){
@@ -301,7 +309,7 @@ public class FourWheelMecanum extends RobotComponent {
             timeLastCalled = -1;
             usedMotors.clear();
             targetDistance = distance;
-            initialAngle = getProcessedAngle(0);
+            initialAngle = getProcessedAngle();
             direction = d;
             timeOut = time;
 
@@ -467,7 +475,7 @@ public class FourWheelMecanum extends RobotComponent {
                 timeFirstCalled = System.currentTimeMillis();
             }
             boolean turnLeft = false;
-            double currentAngle = getProcessedAngle(0);
+            double currentAngle = getProcessedAngle();
             double error = currentAngle - targetAngle;
 
             if (Math.abs(error) < 2 || System.currentTimeMillis() - timeFirstCalled > timeOut){

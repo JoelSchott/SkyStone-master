@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.RobotBase;
 import org.firstinspires.ftc.robotcontroller.internal.Core.RobotComponent;
+import org.firstinspires.ftc.robotcontroller.internal.Core.Sensors.MRGyro;
+import org.firstinspires.ftc.robotcontroller.internal.Core.Sensors.MRRange;
 import org.firstinspires.ftc.robotcontroller.internal.Core.Sensors.REVIMU;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.Collector;
@@ -21,6 +23,8 @@ public class MainBase extends RobotBase {
     public Output output;
 
     public REVIMU imu;
+    public MRGyro gyro;
+    public MRRange frontRange;
 
     private RobotComponent[] components = new RobotComponent[4];
 
@@ -44,6 +48,14 @@ public class MainBase extends RobotBase {
         imu = new REVIMU(this,"imu", params);
         imu.calibrateTo(0);
         telemetry.addLine("created imu");
+        telemetry.update();
+
+        gyro = new MRGyro(this, "gyro");
+        telemetry.addLine("created gyro");
+        telemetry.update();
+
+        frontRange = new MRRange(this, "frontRange");
+        telemetry.addLine("Made front range");
         telemetry.update();
 
         drivetrain = new FourWheelMecanum(this, imu);

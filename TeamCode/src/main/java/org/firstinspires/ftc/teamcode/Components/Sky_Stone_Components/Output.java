@@ -10,20 +10,19 @@ import org.firstinspires.ftc.robotcontroller.internal.Core.RobotComponent;
 
 public class Output extends RobotComponent {
     public DcMotor lift;
-    public CRServo blockRotator;
+    public Servo blockRotator;
     public Servo clamp;
     public Servo marker;
 
     public Output (RobotBase base){
         super(base);
         lift = base.getMapper().mapMotor("lift");
-        blockRotator = base.getMapper().mapCRServo("rotator", CRServo.Direction.FORWARD);
+        blockRotator = base.getMapper().mapServo("rotator", Servo.Direction.FORWARD);
         clamp = base.getMapper().mapServo("clamp", Servo.Direction.FORWARD);
         marker = base.getMapper().mapServo("marker", Servo.Direction.FORWARD);
     }
     public void stop(){
         lift.setPower(0);
-        blockRotator.setPower(0);
     }
     //This controls the lift motion upwards
     public void liftUp(double power){
@@ -32,15 +31,15 @@ public class Output extends RobotComponent {
     }
     //This controls the lift motion downwards
     public void liftDown(double power){
-        lift.setPower(-power);
+        lift.setPower(-0.75);
     }
     //This controls the outtake system that moves the block outside of the robot
     public void outRotate(double power){
-        blockRotator.setPower(power);
+        blockRotator.setPosition(1.0);
     }
     //This rotates the outtake system back to the pick-up position
     public void inRotate(double power){
-        blockRotator.setPower(-power);
+        blockRotator.setPosition(0.15);
     }
     //This system clamps onto the block and keeps it secure
     public void clampGrab(){
