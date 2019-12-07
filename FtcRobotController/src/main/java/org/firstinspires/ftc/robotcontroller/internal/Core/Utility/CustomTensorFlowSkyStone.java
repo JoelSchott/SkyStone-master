@@ -86,6 +86,9 @@ public class CustomTensorFlowSkyStone {
     }
 
     public static SkyStonePosition getPosition(List<Recognition> stones){
+        if (stones == null){
+            return SkyStonePosition.UNKNOWN;
+        }
         SkyStonePosition position = SkyStonePosition.UNKNOWN;
         ArrayList<Recognition> skystones = new ArrayList<>();
         Iterator iterator = stones.iterator();

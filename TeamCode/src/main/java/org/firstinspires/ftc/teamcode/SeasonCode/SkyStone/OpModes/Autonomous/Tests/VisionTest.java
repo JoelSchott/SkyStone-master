@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 
-@Autonomous(name = "Vision Test")
+//@Autonomous(name = "Vision Test")
 public class VisionTest extends LinearOpMode {
 
     private CustomTensorFlowSkyStone vision;

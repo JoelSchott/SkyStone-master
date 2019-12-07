@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomTensorFlowSkyStone;
@@ -10,7 +11,8 @@ import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
 
 import java.util.List;
 
-@Autonomous(name = "Custom Joel Control Octagon", group = "Autonomous")
+
+//@Autonomous(name = "Custom Joel Control Octagon", group = "Autonomous")
 public class OctagonAuto extends LinearOpMode {
 
     MainBase base;

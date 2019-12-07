@@ -33,19 +33,9 @@ public class PathTest extends LinearOpMode {
 
         waitForStart();
 
-        base.drivetrain.encoderTurn(0.6, 2*Math.PI, 6);
+        base.drivetrain.gyroTurn(0.1, 1, 40, 6);
 
-        telemetry.clear();
-        telemetry.addLine(distance + " inches");
-        telemetry.addData("front left encoder is ", base.drivetrain.frontLeft.getCurrentPosition());
-        telemetry.addData("front right encoder is ", base.drivetrain.frontRight.getCurrentPosition());
-        telemetry.addData("back left encoder is ", base.drivetrain.backLeft.getCurrentPosition());
-        telemetry.addData("back right encoder is ", base.drivetrain.backRight.getCurrentPosition());
-        double averageEncoders = (double)(base.drivetrain.frontLeft.getCurrentPosition() + base.drivetrain.frontRight.getCurrentPosition() +
-                base.drivetrain.backRight.getCurrentPosition() + base.drivetrain.backLeft.getCurrentPosition())/4.0;
-        telemetry.addData("average encoders are ", averageEncoders);
-        telemetry.update();
-        sleep(30000);
+
 
     }
 

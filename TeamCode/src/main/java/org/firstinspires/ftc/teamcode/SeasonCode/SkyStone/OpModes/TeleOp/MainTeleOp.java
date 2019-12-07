@@ -47,7 +47,7 @@ public class MainTeleOp extends LinearOpMode {
                     break;
 
                 case FIELD_RELATIVE:
-                    base.drivetrain.fieldRelativeDrive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+                    base.drivetrain.fieldRelativeDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x);
                     break;
             }
 
@@ -65,7 +65,7 @@ public class MainTeleOp extends LinearOpMode {
 
             //------------------------------------COLLECTING-------------------------------------------------------------
             if (gamepad2.a){
-                base.collector.collect(1);
+                base.collector.collect(0.7);
             }
             else if (gamepad2.b){
                 base.collector.spew(1);
@@ -95,7 +95,12 @@ public class MainTeleOp extends LinearOpMode {
             //---------LIFT----------------------
 
             if (Math.abs(gamepad2.right_stick_y) > 0.1){
-                base.output.lift.setPower(-gamepad2.right_stick_y);
+                if (gamepad2.right_stick_y > 0){
+                    base.output.lift.setPower(-gamepad2.right_stick_y / 5.0);
+                }
+                else {
+                    base.output.lift.setPower(-gamepad2.right_stick_y);
+                }
             }
             else{
                 base.output.lift.setPower(0);
@@ -123,6 +128,7 @@ public class MainTeleOp extends LinearOpMode {
 
             telemetry.addData("Gyro Angle is ", base.gyro.heading());
             telemetry.addData("Processed angle is", base.drivetrain.getProcessedAngle());
+            telemetry.addData("front distance is ", base.frontRange.customDistanceInInches());
             telemetry.addData("Drive state is ", driveState);
             telemetry.addLine();
             telemetry.addData("Front Left drivetrain ", base.drivetrain.frontLeft.getCurrentPosition());

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 
-@Autonomous(name = "Webcam Vision Test")
+//@Autonomous(name = "Webcam Vision Test")
 public class WebcamVision extends LinearOpMode {
 
     private CustomWebcamSkyStone vision;

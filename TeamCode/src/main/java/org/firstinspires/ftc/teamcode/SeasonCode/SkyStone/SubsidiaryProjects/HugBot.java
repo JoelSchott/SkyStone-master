@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "HugBotTeleOp", group = "TeleOp")
+//@TeleOp(name = "HugBotTeleOp", group = "TeleOp")
 public class HugBot extends LinearOpMode {
 
     private DcMotor driveMotor1;

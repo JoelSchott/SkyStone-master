@@ -38,7 +38,7 @@ public class FourWheelMecanum extends RobotComponent {
 
     private ElapsedTime runTime = new ElapsedTime();
 
-    double initialAngle = 180;
+    private int initialAngle = 180;
 
     public enum Direction{
         FORWARD, FORWARD_RIGHT, RIGHT, BACK_RIGHT, BACK, BACK_LEFT, LEFT, FORWARD_LEFT
@@ -214,20 +214,89 @@ public class FourWheelMecanum extends RobotComponent {
         return hardInput;
     }
 
+    public void setInitalAngle(int angle){
+        initialAngle = angle;
+    }
+
     public double getProcessedAngle(){
-        return gyro.heading() + initialAngle;
+        int angle = gyro.heading() + initialAngle;
+        while (angle < 0){
+            angle += 360;
+        }
+        angle = angle % 360;
+
+        return angle;
     }
 
     public void encoderTurn(double speed, double radians, double timeOut){
         double distance = radians * ROBOT_RADIUS;
         encoderDrive(speed, distance, distance, -distance, -distance, timeOut);
     }
-    public void gyroTurn(double speed, double targetDegrees, double timeOut){
-        runTime.reset();
+    public void gyroTurn(double minSpeed, double maxSpeed, double targetDegrees, double timeOut){
+        boolean turnLeft = true;
+        double error = targetDegrees - getProcessedAngle();
+        double absoluteError = Math.abs(error);
+        if (absoluteError > 180){
+            absoluteError = 360 - absoluteError;
+        }
 
+        if (absoluteError < 180){
+            if (error > 0){
+                turnLeft = true;
+            }
+            else{
+                turnLeft = false;
+            }
+        }
+        else{
+            if (error > 0){
+                turnLeft = false;
+            }
+            else{
+                turnLeft = true;
+            }
+        }
+
+        runTime.reset();
+        while (absoluteError > 2 && runTime.seconds() < timeOut && base().getOpMode().opModeIsActive()){
+
+            base().getTelemetry().addData("turn Left is ", turnLeft);
+            base().getTelemetry().addData("target degrees are ", targetDegrees);
+            base().getTelemetry().addData("processed angle is ", getProcessedAngle());
+            base().getTelemetry().addData("power is ", (maxSpeed - minSpeed)*absoluteError/180.0 + minSpeed);
+
+
+            base().getTelemetry().update();
+
+            absoluteError = Math.abs(targetDegrees - getProcessedAngle());
+            if (absoluteError > 180){
+                absoluteError = 360 - absoluteError;
+            }
+
+            //double power = (maxSpeed - minSpeed)*absoluteError/180.0 + minSpeed;
+            double power = (maxSpeed-minSpeed)*(Math.log(1+error))/(Math.log(181)) + minSpeed;
+
+            if (turnLeft){
+                backLeft.setPower(-power);
+                frontLeft.setPower(-power);
+                backRight.setPower(power);
+                frontRight.setPower(power);
+            }
+            else{
+                backLeft.setPower(power);
+                frontLeft.setPower(power);
+                backRight.setPower(-power);
+                frontRight.setPower(-power);
+            }
+
+
+        }
     }
 
     public void encoderDrive(double speed, Direction direction, double distance, double timeOut){
+        if (direction == Direction.FORWARD || direction == Direction.RIGHT || direction == Direction.BACK || direction == Direction.LEFT){
+            distance = distance * 1.4142;
+        }
         if (direction == Direction.FORWARD){
             encoderDrive(speed, distance, distance, distance, distance, timeOut);
         }
@@ -235,7 +304,6 @@ public class FourWheelMecanum extends RobotComponent {
             encoderDrive(speed, 0, distance, distance, 0, timeOut);
         }
         else if (direction == Direction.LEFT){
-            distance = distance * 1.4142;
             encoderDrive(speed, -distance, distance, distance, -distance, timeOut);
         }
         else if (direction == Direction.BACK_LEFT){
@@ -248,7 +316,6 @@ public class FourWheelMecanum extends RobotComponent {
             encoderDrive(speed, 0, -distance, -distance, 0, timeOut);
         }
         else if (direction == Direction.RIGHT){
-            distance = distance * 1.4142;
             encoderDrive(speed, distance, -distance, -distance, distance, timeOut);
         }
         else if (direction == Direction.FORWARD_RIGHT){
@@ -274,11 +341,23 @@ public class FourWheelMecanum extends RobotComponent {
 
         setPowers(Math.abs(speed));
 
+        int busyMotors = 4;
         while (base().getOpMode().opModeIsActive() && (runTime.seconds() < timeout) &&
-                (frontLeft.isBusy() || backLeft.isBusy() || frontRight.isBusy() || backRight.isBusy())){
+                (busyMotors > 1)){
+            busyMotors = 0;
+            if (frontLeft.isBusy()){
+                busyMotors ++;
+            }
+            if (backLeft.isBusy()){
+                busyMotors++;
+            }
+            if (frontRight.isBusy()){
+                busyMotors++;
+            }
+            if(backRight.isBusy()){
+                busyMotors++;
+            }
 
-            base().getTelemetry().addLine(String.format("Running to %7d : %7d : %7d : %7d", frontLeftTarget, backLeftTarget, frontRightTarget, backRightTarget));
-            base().getTelemetry().addLine(String.format("Currently at %7d : %7d : %7d : %7d", frontLeft.getCurrentPosition(), backLeft.getCurrentPosition(), frontRight.getCurrentPosition(), backRight.getCurrentPosition()));
         }
 
         stop();
