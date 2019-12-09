@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class CustomTensorFlowSkyStone {
+public class CustomPhoneCameraSkyStone {
 
-    public CustomTensorFlowSkyStone(HardwareMap map){
+    public CustomPhoneCameraSkyStone(HardwareMap map){
         this.hardwareMap = map;
     }
 
@@ -85,20 +85,71 @@ public class CustomTensorFlowSkyStone {
         return null;
     }
 
-    public static SkyStonePosition getPosition(List<Recognition> stones){
+    public static SkyStonePosition TwoStonesGetPosition(List<Recognition> stones){
+        if (stones == null){
+            return SkyStonePosition.UNKNOWN;
+        }
+        if (stones.size() < 2){
+            return SkyStonePosition.UNKNOWN;
+        }
+        SkyStonePosition position;
+        Recognition leftStone = null;
+        Recognition rightStone = null;
+
+        while(stones.size() > 2){
+            int indexToRemove = 0;
+            double lowestConfidence = 1;
+            for (int i = 0; i < stones.size(); i++){
+                if (stones.get(i).getConfidence() < lowestConfidence){
+                    lowestConfidence = stones.get(i).getConfidence();
+                    indexToRemove = i;
+                }
+            }
+            stones.remove(indexToRemove);
+        }
+
+        double firstMidpoint = (stones.get(0).getLeft() + stones.get(0).getRight())/(2.0);
+        double secondMidpoint = (stones.get(1).getLeft() + stones.get(1).getRight())/(2.0);
+
+        if (firstMidpoint < secondMidpoint){
+            leftStone = stones.get(0);
+            rightStone = stones.get(1);
+        }
+        else{
+            rightStone = stones.get(0);
+            leftStone = stones.get(0);
+        }
+
+        if (leftStone.getLabel().equals("Skystone") && rightStone.getLabel().equals("stone")){
+            position = SkyStonePosition.MIDDLE;
+        }
+        else if (leftStone.getLabel().equals("stone") && rightStone.getLabel().equals("Skystone")){
+            position = SkyStonePosition.RIGHT;
+        }
+        else{
+            position = SkyStonePosition.LEFT;
+        }
+        return position;
+    }
+
+    public static SkyStonePosition ThreeStonesGetPosition(List<Recognition> stones){
         if (stones == null){
             return SkyStonePosition.UNKNOWN;
         }
         SkyStonePosition position = SkyStonePosition.UNKNOWN;
         ArrayList<Recognition> skystones = new ArrayList<>();
-        Iterator iterator = stones.iterator();
-        while (iterator.hasNext()){
-            Recognition stone = (Recognition)iterator.next();
-            if (stone.getLabel().equals("Skystone")){
-                skystones.add(stone);
-                stones.remove(stone);
+
+        ArrayList<Integer> indexesToRemove = new ArrayList<>();
+        for (int i = 0; i< stones.size(); i++){
+            if (stones.get(i).getLabel().equals("Skystone")){
+                skystones.add(stones.get(i));
+                indexesToRemove.add(i);
             }
         }
+        for (int g = indexesToRemove.size() -1; g > -1; g--){
+            stones.remove(indexesToRemove.get(g));
+        }
+
         if (skystones.size() == 1 && stones.size() == 2){
             if (skystones.get(0).getRight() > stones.get(0).getRight() && skystones.get(0).getRight() > stones.get(1).getRight()){
                 position = SkyStonePosition.RIGHT;

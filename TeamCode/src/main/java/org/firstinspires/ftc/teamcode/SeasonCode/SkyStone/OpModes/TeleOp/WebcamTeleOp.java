@@ -3,14 +3,16 @@ package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
+import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCameraSkyStone;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBaseWebcam;
 
-@TeleOp(name = "Main TeleOp", group = "TeleOp")
-public class MainTeleOp extends LinearOpMode {
+@TeleOp(name = "Webcam TeleOp", group = "TeleOp")
+public class WebcamTeleOp extends LinearOpMode {
 
-    MainBase base;
+    MainBaseWebcam base;
 
-    DrivetrainState driveState = DrivetrainState.FIELD_RELATIVE;
+    DrivetrainState driveState = DrivetrainState.ROBOT_RELATIVE;
 
     private boolean clamped = false;
     private boolean clampButtonHeld = false;
@@ -25,7 +27,7 @@ public class MainTeleOp extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        base = new MainBase(hardwareMap, telemetry, this);
+        base = new MainBaseWebcam(hardwareMap, telemetry, this);
         base.init();
 
         telemetry.clear();
@@ -94,7 +96,12 @@ public class MainTeleOp extends LinearOpMode {
             //---------LIFT----------------------
 
             if (Math.abs(gamepad2.right_stick_y) > 0.1){
-                base.output.lift.setPower(gamepad2.right_stick_y);
+                if (gamepad2.right_stick_y > 0){
+                    base.output.lift.setPower(-gamepad2.right_stick_y);
+                }
+                else {
+                    base.output.lift.setPower(-gamepad2.right_stick_y);
+                }
             }
             else{
                 base.output.lift.setPower(0);
@@ -120,7 +127,23 @@ public class MainTeleOp extends LinearOpMode {
 
             //------------------------------------TELEMETRY--------------------------------------------------------
 
-            telemetry.addData("Gyro Angle is ", base.gyro.heading());
+
+            CustomPhoneCameraSkyStone.SkyStonePosition position = CustomPhoneCameraSkyStone.TwoStonesGetPosition(base.webcam.getObjects());
+            telemetry.addLine("Block position is "+ position.name());
+            if (position != null){
+                for (Recognition stone : base.webcam.getObjects()){
+                    telemetry.addData("Stone with label ", stone.getLabel());
+                    telemetry.addData("confidence is ", stone.getConfidence());
+                    telemetry.addLine("top, left is " + stone.getTop() + " , " + stone.getLeft());
+                    telemetry.addLine("bottom, right is " + stone.getBottom() + " , " + stone.getRight());
+                    telemetry.addData("MIDPOINT IS ", (stone.getLeft() + stone.getRight())/2.0);
+                    telemetry.addLine();
+                }
+            }
+            telemetry.update();
+
+
+            /*telemetry.addData("Gyro Angle is ", base.gyro.heading());
             telemetry.addData("Processed angle is", base.drivetrain.getProcessedAngle());
             telemetry.addData("front distance is ", base.frontRange.customDistanceInInches());
             telemetry.addData("Drive state is ", driveState);
@@ -132,7 +155,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addLine();
             telemetry.addData("marker position is trying to be ", base.output.marker.getPosition());
             telemetry.addData("clamp position is trying to be ", base.output.clamp.getPosition());
-            telemetry.addData("debug clamp count is ", debugClampCount);
+            telemetry.addData("debug clamp count is ", debugClampCount);*/
 
             telemetry.update();
 

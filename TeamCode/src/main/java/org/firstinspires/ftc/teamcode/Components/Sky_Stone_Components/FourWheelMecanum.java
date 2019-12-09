@@ -260,21 +260,23 @@ public class FourWheelMecanum extends RobotComponent {
         runTime.reset();
         while (absoluteError > 2 && runTime.seconds() < timeOut && base().getOpMode().opModeIsActive()){
 
-            base().getTelemetry().addData("turn Left is ", turnLeft);
-            base().getTelemetry().addData("target degrees are ", targetDegrees);
-            base().getTelemetry().addData("processed angle is ", getProcessedAngle());
-            base().getTelemetry().addData("power is ", (maxSpeed - minSpeed)*absoluteError/180.0 + minSpeed);
 
-
-            base().getTelemetry().update();
 
             absoluteError = Math.abs(targetDegrees - getProcessedAngle());
             if (absoluteError > 180){
                 absoluteError = 360 - absoluteError;
             }
 
+            base().getTelemetry().addData("turn Left is ", turnLeft);
+            base().getTelemetry().addData("target degrees are ", targetDegrees);
+            base().getTelemetry().addData("processed angle is ", getProcessedAngle());
+            base().getTelemetry().addData("power is ", (maxSpeed-minSpeed)*(Math.log(1+error))/(Math.log(181)) + minSpeed);
+            base().getTelemetry().addData("absolute error is ", absoluteError);
+
+
+            base().getTelemetry().update();
             //double power = (maxSpeed - minSpeed)*absoluteError/180.0 + minSpeed;
-            double power = (maxSpeed-minSpeed)*(Math.log(1+error))/(Math.log(181)) + minSpeed;
+            double power = (maxSpeed-minSpeed)*(Math.log(1+absoluteError))/(Math.log(181)) + minSpeed;
 
             if (turnLeft){
                 backLeft.setPower(-power);
@@ -356,6 +358,12 @@ public class FourWheelMecanum extends RobotComponent {
             }
             if(backRight.isBusy()){
                 busyMotors++;
+            }
+            double sumEncoderError = Math.abs(frontLeft.getCurrentPosition() - frontLeft.getTargetPosition())+ Math.abs(backLeft.getCurrentPosition() - backLeft.getTargetPosition() +
+                    Math.abs(frontRight.getCurrentPosition() - frontRight.getTargetPosition()) + Math.abs(backRight.getCurrentPosition() - backRight.getTargetPosition()));
+            double sumInchesError = sumEncoderError / COUNTS_PER_INCH;
+            if (sumInchesError < 0.4){
+                break;
             }
 
         }

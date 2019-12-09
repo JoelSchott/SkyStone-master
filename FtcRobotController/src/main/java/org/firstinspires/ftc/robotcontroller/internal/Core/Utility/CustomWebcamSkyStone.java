@@ -32,6 +32,10 @@ public class CustomWebcamSkyStone {
         hardwareMap = map;
     }
 
+    public VuforiaLocalizer getVuforia(){
+        return vuforia;
+    }
+
     public void init(){
         initVuforia();
 

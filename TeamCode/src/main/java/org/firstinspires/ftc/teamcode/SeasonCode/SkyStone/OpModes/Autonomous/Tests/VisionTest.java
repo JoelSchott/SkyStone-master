@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Tests;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomTensorFlowSkyStone;
+import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCameraSkyStone;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
@@ -11,13 +10,13 @@ import java.util.List;
 //@Autonomous(name = "Vision Test")
 public class VisionTest extends LinearOpMode {
 
-    private CustomTensorFlowSkyStone vision;
+    private CustomPhoneCameraSkyStone vision;
 
     private List<Recognition> objects;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        vision = new CustomTensorFlowSkyStone(hardwareMap);
+        vision = new CustomPhoneCameraSkyStone(hardwareMap);
         vision.init();
 
         waitForStart();

@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Te
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomTensorFlowSkyStone;
+import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCameraSkyStone;
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomWebcamSkyStone;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 
-//@Autonomous(name = "Webcam Vision Test")
+@Autonomous(name = "Webcam Vision Test")
 public class WebcamVision extends LinearOpMode {
 
     private CustomWebcamSkyStone vision;
@@ -48,7 +48,7 @@ public class WebcamVision extends LinearOpMode {
                                 object.getRight(), object.getBottom());
                     }
                 }
-                telemetry.addData("Conclusion is ", CustomTensorFlowSkyStone.getPosition(objects));
+                telemetry.addData("Conclusion is ", CustomPhoneCameraSkyStone.TwoStonesGetPosition(objects));
 
             }
             telemetry.update();
