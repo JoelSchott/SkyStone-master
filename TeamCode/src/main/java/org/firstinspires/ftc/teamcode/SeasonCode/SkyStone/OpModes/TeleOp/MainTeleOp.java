@@ -11,14 +11,17 @@ public class MainTeleOp extends LinearOpMode {
     MainBase base;
 
     DrivetrainState driveState = DrivetrainState.FIELD_RELATIVE;
+    DrivetrainMode driveMode = DrivetrainMode.FULL_SPEED;
 
     private boolean clamped = false;
-    private boolean clampButtonHeld = false;
-
-    private int debugClampCount = 0;
+    private boolean gamepad2xHeld = false;
 
     enum DrivetrainState{
         ROBOT_RELATIVE,FIELD_RELATIVE
+    }
+
+    enum DrivetrainMode{
+        FULL_SPEED, SLOW_MODE
     }
 
 
@@ -30,6 +33,7 @@ public class MainTeleOp extends LinearOpMode {
 
         telemetry.clear();
         telemetry.addLine("All Systems Go");
+        telemetry.addLine("May be the Force be with us");
         telemetry.update();
 
 
@@ -40,21 +44,55 @@ public class MainTeleOp extends LinearOpMode {
 
             //------------------------------------DRIVING-----------------------------------------------------
 
+            if (gamepad1.a){
+                driveState = DrivetrainState.FIELD_RELATIVE;
+            }
+            else if (gamepad1.b){
+                driveState = DrivetrainState.ROBOT_RELATIVE;
+            }
+
+            if (gamepad1.x){
+                driveMode = DrivetrainMode.FULL_SPEED;
+            }
+            else if (gamepad1.y){
+                driveMode = DrivetrainMode.SLOW_MODE;
+            }
+
+            double forward = -gamepad1.left_stick_y;
+            double right = gamepad1.left_stick_x;
+            double turn = gamepad1.right_stick_x;
+
+            double scale = 0.3;
+            if (driveMode == DrivetrainMode.SLOW_MODE){
+                forward = forward * scale;
+                right = right * scale;
+                turn = turn * scale;
+            }
+
             switch(driveState){
                 case ROBOT_RELATIVE:
-                    base.drivetrain.robotRelativeDrive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+                    base.drivetrain.robotRelativeDrive(forward, right, turn);
                     break;
 
                 case FIELD_RELATIVE:
-                    base.drivetrain.fieldRelativeDrive(gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x);
+                    base.drivetrain.fieldRelativeDrive(forward, right, turn);
                     break;
             }
 
-            if (gamepad1.a){
-                driveState = DrivetrainState.ROBOT_RELATIVE;
+
+            //setting angles
+
+            if (gamepad1.dpad_left){
+                base.drivetrain.setCurrentAngleAs(180);
             }
-            else if (gamepad1.b){
-                driveState = DrivetrainState.FIELD_RELATIVE;
+            else if (gamepad1.dpad_down){
+                base.drivetrain.setCurrentAngleAs(270);
+            }
+            else if (gamepad1.dpad_right){
+                base.drivetrain.setCurrentAngleAs(0);
+            }
+            else if (gamepad1.dpad_up){
+                base.drivetrain.setCurrentAngleAs(90);
             }
 
             //--------------------------------------FOUNDATION MOVING----------------------------------------------
@@ -64,7 +102,7 @@ public class MainTeleOp extends LinearOpMode {
 
             //------------------------------------COLLECTING-------------------------------------------------------------
             if (gamepad2.a){
-                base.collector.collect(0.7);
+                base.collector.collect(0.9);
             }
             else if (gamepad2.b){
                 base.collector.spew(1);
@@ -76,8 +114,8 @@ public class MainTeleOp extends LinearOpMode {
 
             //------------------------------------OUTPUT-------------------------------------------------------------
             //-----------CLAMP------------------
-            if (gamepad2.x && !clampButtonHeld){
-                clampButtonHeld = true;
+            if (gamepad2.x && !gamepad2xHeld){
+                gamepad2xHeld = true;
                 if (clamped){
                     base.output.clampRelease();
                     clamped = false;
@@ -85,11 +123,10 @@ public class MainTeleOp extends LinearOpMode {
                 else{
                     base.output.clampGrab();
                     clamped = true;
-                    debugClampCount++;
                 }
             }
             if (!gamepad2.x){
-                clampButtonHeld = false;
+                gamepad2xHeld = false;
             }
             //---------LIFT----------------------
 
@@ -120,19 +157,12 @@ public class MainTeleOp extends LinearOpMode {
 
             //------------------------------------TELEMETRY--------------------------------------------------------
 
-            telemetry.addData("Gyro Angle is ", base.gyro.heading());
-            telemetry.addData("Processed angle is", base.drivetrain.getProcessedAngle());
-            telemetry.addData("front distance is ", base.frontRange.customDistanceInInches());
-            telemetry.addData("Drive state is ", driveState);
+
+            telemetry.addData("DRIVE STATE is ", driveState);
+            telemetry.addData("DRIVE MODE is ", driveMode);
             telemetry.addLine();
-            telemetry.addData("Front Left drivetrain ", base.drivetrain.frontLeft.getCurrentPosition());
-            telemetry.addData("Front Right drivetrain ", base.drivetrain.frontRight.getCurrentPosition());
-            telemetry.addData("Back Left drivetrain ", base.drivetrain.backLeft.getCurrentPosition());
-            telemetry.addData("Back Right drivetrain ", base.drivetrain.backRight.getCurrentPosition());
+            telemetry.addLine("angle is " + base.drivetrain.getProcessedAngle() + " degrees");
             telemetry.addLine();
-            telemetry.addData("marker position is trying to be ", base.output.marker.getPosition());
-            telemetry.addData("clamp position is trying to be ", base.output.clamp.getPosition());
-            telemetry.addData("debug clamp count is ", debugClampCount);
 
             telemetry.update();
 

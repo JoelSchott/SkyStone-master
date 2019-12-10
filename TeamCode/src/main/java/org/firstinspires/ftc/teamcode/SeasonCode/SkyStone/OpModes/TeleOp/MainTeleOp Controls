@@ -6,18 +6,18 @@ left joystick button ----
 right joystick y --------
 right joystick x -------- left is turning counterclockwise, right is turning clockwise
 right joystick button ---
-a ----------------------- switches to robot-relative drive
-b ----------------------- switches to field-relative drive
-x -----------------------
-y -----------------------
+a ----------------------- switches to field-relative drive
+b ----------------------- switches to robot-relative drive
+x ----------------------- switches to full speed mode
+y ----------------------- switches to slow mode
 left bumper (higher up) -
 right bumper (higher up)-
 left trigger ------------
 right trigger -----------
-D-pad left --------------
-D-pad bottom ------------
-D-pad right -------------
-D-pad top ---------------
+D-pad left -------------- sets angle to 180 degrees for field-relative drive
+D-pad bottom ------------ sets angle to 270 degrees for field-relative drive
+D-pad right ------------- sets angle to 0 degrees for field-relative drive
+D-pad top --------------- sets angle to 90 degrees for field-relative drive
 
 
 Gamepad 2---------------------------------------------------------------------------
@@ -30,7 +30,7 @@ right joystick x --------
 right joystick button ---
 a  ---------------------- collects
 b  ---------------------- spews
-x  ---------------------- clamp of block
+x  ---------------------- toggle clamp/unclamp of block
 y -----------------------
 left bumper (higher up) - capstone servo back in
 right bumper (higher up)- placing capstone

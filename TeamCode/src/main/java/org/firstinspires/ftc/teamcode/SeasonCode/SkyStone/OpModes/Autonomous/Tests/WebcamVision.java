@@ -48,10 +48,66 @@ public class WebcamVision extends LinearOpMode {
                                 object.getRight(), object.getBottom());
                     }
                 }
-                telemetry.addData("Conclusion is ", CustomPhoneCameraSkyStone.TwoStonesGetPosition(objects));
+                telemetry.addData("Conclusion is ", TwoStonesGetPosition(objects));
 
             }
             telemetry.update();
         }
+
+    }
+
+    private CustomPhoneCameraSkyStone.SkyStonePosition TwoStonesGetPosition(List<Recognition> stones){
+        if (stones == null){
+            return CustomPhoneCameraSkyStone.SkyStonePosition.UNKNOWN;
+        }
+        if (stones.size() < 2){
+            return CustomPhoneCameraSkyStone.SkyStonePosition.UNKNOWN;
+        }
+        telemetry.addLine();
+        telemetry.addLine("Got this far");
+
+        CustomPhoneCameraSkyStone.SkyStonePosition position;
+        Recognition leftStone = null;
+        Recognition rightStone = null;
+
+        while(stones.size() > 2){
+            int indexToRemove = 0;
+            double lowestConfidence = 1;
+            for (int i = 0; i < stones.size(); i++){
+                if (stones.get(i).getConfidence() < lowestConfidence){
+                    lowestConfidence = stones.get(i).getConfidence();
+                    indexToRemove = i;
+                }
+            }
+            stones.remove(indexToRemove);
+        }
+
+        double firstMidpoint = (stones.get(0).getLeft() + stones.get(0).getRight())/(2.0);
+        telemetry.addData("First midpoint is ", firstMidpoint);
+        double secondMidpoint = (stones.get(1).getLeft() + stones.get(1).getRight())/(2.0);
+        telemetry.addData("Second midpoint is ", secondMidpoint);
+
+        if (firstMidpoint < secondMidpoint){
+            leftStone = stones.get(0);
+            rightStone = stones.get(1);
+        }
+        else{
+            rightStone = stones.get(0);
+            leftStone = stones.get(1);
+        }
+
+        telemetry.addData("leftStone label is ", leftStone.getLabel());
+        telemetry.addData("rightStone label is ", rightStone.getLabel());
+
+        if (leftStone.getLabel().equals("Skystone") && rightStone.getLabel().equals("Stone")){
+            position = CustomPhoneCameraSkyStone.SkyStonePosition.MIDDLE;
+        }
+        else if (leftStone.getLabel().equals("Stone") && rightStone.getLabel().equals("Skystone")){
+            position = CustomPhoneCameraSkyStone.SkyStonePosition.RIGHT;
+        }
+        else{
+            position = CustomPhoneCameraSkyStone.SkyStonePosition.LEFT;
+        }
+        return position;
     }
 }

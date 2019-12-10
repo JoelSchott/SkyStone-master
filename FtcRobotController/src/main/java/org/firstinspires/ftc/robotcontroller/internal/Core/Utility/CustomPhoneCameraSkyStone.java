@@ -117,13 +117,13 @@ public class CustomPhoneCameraSkyStone {
         }
         else{
             rightStone = stones.get(0);
-            leftStone = stones.get(0);
+            leftStone = stones.get(1);
         }
 
-        if (leftStone.getLabel().equals("Skystone") && rightStone.getLabel().equals("stone")){
+        if (leftStone.getLabel().equals("Skystone") && rightStone.getLabel().equals("Stone")){
             position = SkyStonePosition.MIDDLE;
         }
-        else if (leftStone.getLabel().equals("stone") && rightStone.getLabel().equals("Skystone")){
+        else if (leftStone.getLabel().equals("Stone") && rightStone.getLabel().equals("Skystone")){
             position = SkyStonePosition.RIGHT;
         }
         else{

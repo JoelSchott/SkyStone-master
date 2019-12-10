@@ -23,11 +23,11 @@ public class RedStone extends LinearOpMode {
     private final static double MINIMUM_TURN_SPEED = 0.1;
     private final static double DISTANCE_ADJUSTMENT_SPEED = 0.09;
 
-    private final static double FIRST_DISTANCE = 32.5;
+    private final static double FIRST_DISTANCE = 30;
 
     private static final double LEFT_BRIDGE_DISTANCE = 29.2;
     private static final double MIDDLE_BRIDGE_DISTANCE = 25;
-    private static final double RIGHT_BRIDGE_DISTANCE =  8;
+    private static final double RIGHT_BRIDGE_DISTANCE =  14;
 
     private static final double LEFT_FIRST_DISTANCE_TO_WALL = 32.5;
     private static final double LEFT_SECOND_DISTANCE_TO_WALL = 13;
@@ -35,8 +35,8 @@ public class RedStone extends LinearOpMode {
     private static final double MIDDLE_FIRST_DISTANCE_TO_WALL = 40.5;
     private static final double MIDDLE_SECOND_DISTANCE_TO_WALL = 21;
 
-    private static final double RIGHT_FIRST_DISTANCE_TO_WALL = 48.5;
-    private static final double RIGHT_SECOND_DISTANCE_TO_WALL = 42;
+    private static final double RIGHT_FIRST_DISTANCE_TO_WALL = 47.5;
+    private static final double RIGHT_SECOND_DISTANCE_TO_WALL = 25.5;
 
 
 
@@ -52,7 +52,11 @@ public class RedStone extends LinearOpMode {
         base.drivetrain.setInitalAngle(180);
 
         vision = new CustomPhoneCameraSkyStone(hardwareMap);
+        vision.init();
 
+        telemetry.clearAll();
+        telemetry.addLine("May the Force be with us");
+        telemetry.update();
 
         waitForStart();
 
@@ -62,9 +66,10 @@ public class RedStone extends LinearOpMode {
 
         frontRangeDriveToDistance(FIRST_DISTANCE);
 
+        base.drivetrain.setPowers(0);
+
         sleep(750);
 
-        //reads current vision input
         stones = vision.getObjects();
         if (stones != null){
             for (Recognition stone : stones){
@@ -74,10 +79,16 @@ public class RedStone extends LinearOpMode {
                 telemetry.addLine();
             }
         }
+        location = CustomPhoneCameraSkyStone.TwoStonesGetPosition(vision.getObjects());
+        telemetry.addData("Position is " , location.name());
         telemetry.update();
 
-        location = CustomPhoneCameraSkyStone.TwoStonesGetPosition(vision.getObjects());
-        location = CustomPhoneCameraSkyStone.SkyStonePosition.MIDDLE;
+        sleep(20000);
+
+        //reads current vision input
+
+        telemetry.update();
+
 
         switch(location){
             case LEFT:
@@ -249,7 +260,7 @@ public class RedStone extends LinearOpMode {
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 42, 5);
 
                 //drives to be in building zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 26, 4);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 27.5, 4);
 
                 //turns around
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 65,  7);
@@ -261,7 +272,7 @@ public class RedStone extends LinearOpMode {
                 base.collector.stop();
 
                 //parks on line
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 8, 3);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 10, 3);
 
                 break;
 
@@ -273,27 +284,30 @@ public class RedStone extends LinearOpMode {
                 //rotates to face forward
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.6, 180, 2);
 
+                //drives back to distance
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 4, 4);
+
                 //drives to specific distance from the wall
                 frontRangeDriveToDistance(RIGHT_FIRST_DISTANCE_TO_WALL);
 
                 //rotates to face block on the right
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,0.5,135,1);
+                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,0.5,133,1);
 
                 //starts collecting
                 base.collector.collect(0.8);
 
                 //collects first stone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 10, 4);
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 16, 4);
+                base.drivetrain.encoderDrive(0.5, FourWheelMecanum.Direction.FORWARD, 10, 4);
+                base.drivetrain.encoderDrive(0.5, FourWheelMecanum.Direction.BACK, 16, 4);
 
                 //stops collecting
                 base.collector.stop();
 
                 //turns to go under bridge
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,1, 0, 4);
+                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,1, 90, 4);
 
-                //drives under bridge
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE, 9);
+                //strafes under bridge
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, RIGHT_BRIDGE_DISTANCE, 9);
 
                 //spits out block
                 base.collector.spew(1);
@@ -303,18 +317,22 @@ public class RedStone extends LinearOpMode {
                 base.collector.stop();
 
                 //turns back
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 180, 6);
+                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.7, 180, 6);
 
                 //drives to second skystone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE + 16, 9);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE + 22, 9);
 
+                //straightens out
+                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.6, 180, 3);
+
+                //adjusts distance to wall
                 frontRangeDriveToDistance(RIGHT_SECOND_DISTANCE_TO_WALL);
 
                 //straightens out
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.5, 180, 3);
 
                 //strafes right to get in front of block
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 16, 6);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 18, 6);
 
                 //starts collecting
                 base.collector.collect(1);
@@ -327,10 +345,10 @@ public class RedStone extends LinearOpMode {
                 base.collector.stop();
 
                 //goes left to prepare to go under bridge
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 35, 5);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 45, 5);
 
                 //drives to be in building zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 22, 4);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 23, 4);
 
                 //turns around
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 70,  7);
@@ -342,7 +360,7 @@ public class RedStone extends LinearOpMode {
                 base.collector.stop();
 
                 //strafes to park on line
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 8, 4);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 14, 4);
 
                 break;
         }
@@ -360,6 +378,7 @@ public class RedStone extends LinearOpMode {
                 base.drivetrain.setPowers(-DISTANCE_ADJUSTMENT_SPEED);
             }
         }
+
     }
 
 }

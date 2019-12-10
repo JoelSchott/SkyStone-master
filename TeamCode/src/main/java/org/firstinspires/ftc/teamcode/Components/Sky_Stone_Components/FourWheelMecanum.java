@@ -96,6 +96,8 @@ public class FourWheelMecanum extends RobotComponent {
     }
 
     public void fieldRelativeDrive(double forward, double right, double turn){
+        forward = -forward;
+        right = -right;
 
         double angle = getProcessedAngle();
         angle = Math.toRadians(angle);
@@ -218,6 +220,10 @@ public class FourWheelMecanum extends RobotComponent {
         initialAngle = angle;
     }
 
+    public void setCurrentAngleAs(int angle){
+        initialAngle = angle - gyro.heading();
+    }
+
     public double getProcessedAngle(){
         int angle = gyro.heading() + initialAngle;
         while (angle < 0){
@@ -293,6 +299,10 @@ public class FourWheelMecanum extends RobotComponent {
 
 
         }
+    }
+
+    public void driveTurn(Direction direction, double distance, double targetAngle){
+
     }
 
     public void encoderDrive(double speed, Direction direction, double distance, double timeOut){
