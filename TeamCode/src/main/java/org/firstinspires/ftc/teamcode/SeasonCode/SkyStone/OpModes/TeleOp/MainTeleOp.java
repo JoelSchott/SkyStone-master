@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
 
+import java.sql.SQLOutput;
+
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
 
@@ -102,7 +104,7 @@ public class MainTeleOp extends LinearOpMode {
 
             //------------------------------------COLLECTING-------------------------------------------------------------
             if (gamepad2.a){
-                base.collector.collect(0.9);
+                base.collector.collect(0.78);
             }
             else if (gamepad2.b){
                 base.collector.spew(1);
@@ -144,6 +146,12 @@ public class MainTeleOp extends LinearOpMode {
             else if (gamepad2.dpad_right){
                 base.output.outRotate(0);
             }
+            if (gamepad2.left_trigger > 0.5){
+                base.output.blockRotator.setPosition(base.output.blockRotator.getPosition() + 0.01);
+            }
+            else if (gamepad2.right_trigger > 0.5){
+                base.output.blockRotator.setPosition(base.output.blockRotator.getPosition() - 0.01);
+            }
 
 
             //----------CAPSTONE-----------------
@@ -163,6 +171,8 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addLine();
             telemetry.addLine("angle is " + base.drivetrain.getProcessedAngle() + " degrees");
             telemetry.addLine();
+            telemetry.addData("rotator position is " , base.output.blockRotator.getPosition());
+            telemetry.addData("range distance is ", base.frontRange.customDistanceInInches());
 
             telemetry.update();
 

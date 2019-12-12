@@ -31,11 +31,11 @@ public class PathTest extends LinearOpMode {
         telemetry.addLine("All Systems Go");
         telemetry.update();
 
+        base.drivetrain.setInitalAngle(0);
+
         waitForStart();
 
-        base.drivetrain.gyroTurn(0.1, 1, 40, 6);
-
-
+        base.drivetrain.driveTurn(-40, 0, 180, 0.1, 0.7, true);
 
     }
 

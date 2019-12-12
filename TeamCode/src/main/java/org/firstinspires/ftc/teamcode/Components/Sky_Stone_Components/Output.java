@@ -39,7 +39,7 @@ public class Output extends RobotComponent {
     }
     //This rotates the outtake system back to the pick-up position
     public void inRotate(double power){
-        blockRotator.setPosition(0.152);
+        blockRotator.setPosition(0.12);
     }
     //This system clamps onto the block and keeps it secure
     public void clampGrab(){

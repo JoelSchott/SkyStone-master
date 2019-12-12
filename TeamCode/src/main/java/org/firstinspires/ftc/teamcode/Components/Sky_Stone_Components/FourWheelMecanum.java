@@ -96,8 +96,6 @@ public class FourWheelMecanum extends RobotComponent {
     }
 
     public void fieldRelativeDrive(double forward, double right, double turn){
-        forward = -forward;
-        right = -right;
 
         double angle = getProcessedAngle();
         angle = Math.toRadians(angle);
@@ -272,17 +270,9 @@ public class FourWheelMecanum extends RobotComponent {
             if (absoluteError > 180){
                 absoluteError = 360 - absoluteError;
             }
-
-            base().getTelemetry().addData("turn Left is ", turnLeft);
-            base().getTelemetry().addData("target degrees are ", targetDegrees);
-            base().getTelemetry().addData("processed angle is ", getProcessedAngle());
-            base().getTelemetry().addData("power is ", (maxSpeed-minSpeed)*(Math.log(1+error))/(Math.log(181)) + minSpeed);
-            base().getTelemetry().addData("absolute error is ", absoluteError);
-
-
-            base().getTelemetry().update();
             //double power = (maxSpeed - minSpeed)*absoluteError/180.0 + minSpeed;
-            double power = (maxSpeed-minSpeed)*(Math.log(1+absoluteError))/(Math.log(181)) + minSpeed;
+            //double power = (maxSpeed-minSpeed)*(Math.log(1+absoluteError))/(Math.log(181)) + minSpeed;
+            double power = (maxSpeed - minSpeed) * Math.pow(absoluteError/180.0, 2.0/5.0) + minSpeed;
 
             if (turnLeft){
                 backLeft.setPower(-power);
@@ -301,7 +291,87 @@ public class FourWheelMecanum extends RobotComponent {
         }
     }
 
-    public void driveTurn(Direction direction, double distance, double targetAngle){
+    public void driveTurn(double forward, double right, double targetDegrees, double minTurnSpeed, double maxTurnSpeed, boolean turnLeft){
+
+        setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setModes(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        double averageEncoders = 0;
+
+        double distance = Math.sqrt(Math.pow(forward,2) + Math.pow(right,2));
+        double absoluteError = Math.abs(targetDegrees - getProcessedAngle());
+
+        while (averageEncoders / COUNTS_PER_INCH < distance || absoluteError > 2){
+            averageEncoders = (Math.abs(frontRight.getCurrentPosition()) + Math.abs(frontLeft.getCurrentPosition()) +
+                    Math.abs(backLeft.getCurrentPosition()) + Math.abs(backRight.getCurrentPosition())) / 4.0;
+
+            double angle = getProcessedAngle();
+            angle = Math.toRadians(angle);
+
+            double relativeForward = (Math.cos(angle)*right) + (Math.sin(angle)*forward);
+            double relativeRight = (Math.sin(angle)*right) - (Math.cos(angle)*forward);
+
+            double scaledError = (distance - (averageEncoders / COUNTS_PER_INCH))/distance;
+            if (relativeForward > 0.1 && relativeRight > 0.1){
+                scaledError = Math.sqrt(scaledError);
+            }
+            else{
+                distance = averageEncoders / COUNTS_PER_INCH;
+                scaledError = 0;
+            }
+            relativeForward *= scaledError;
+            relativeRight *= scaledError;
+
+            absoluteError = Math.abs(targetDegrees - getProcessedAngle());
+            if (absoluteError > 180){
+                absoluteError = 360 - absoluteError;
+            }
+
+            double turnPower = (maxTurnSpeed - minTurnSpeed) * Math.pow(absoluteError/180.0, 2.0/5.0) + minTurnSpeed;
+            if (absoluteError < 2){
+                turnPower = 0;
+            }
+
+            double leftFrontPower = relativeForward + relativeRight;
+            double leftBackPower = relativeForward - relativeRight;
+            double rightFrontPower = relativeForward - relativeRight;
+            double rightBackPower = relativeForward + relativeRight;
+
+            if (turnLeft){
+                leftFrontPower += turnPower;
+                leftBackPower += turnPower;
+                rightFrontPower -= turnPower;
+                rightBackPower -= turnPower;
+            }
+            else{
+                leftFrontPower -= turnPower;
+                leftBackPower -= turnPower;
+                rightFrontPower += turnPower;
+                rightBackPower += turnPower;
+            }
+            double[] powers = {leftFrontPower, leftBackPower, rightFrontPower, rightBackPower};
+            double greatest = 0;
+            for (double power : powers){
+                if (Math.abs(power) > greatest){
+                    greatest = Math.abs(power);
+                }
+            }
+            if (greatest > 1){
+                leftFrontPower /= greatest;
+                leftBackPower /= greatest;
+                rightFrontPower /= greatest;
+                rightBackPower /= greatest;
+            }
+
+
+            frontLeft.setPower(leftFrontPower);
+            backLeft.setPower(leftBackPower);
+            frontRight.setPower(rightFrontPower);
+            backRight.setPower(rightBackPower);
+
+        }
+
+        stop();
 
     }
 
@@ -372,7 +442,7 @@ public class FourWheelMecanum extends RobotComponent {
             double sumEncoderError = Math.abs(frontLeft.getCurrentPosition() - frontLeft.getTargetPosition())+ Math.abs(backLeft.getCurrentPosition() - backLeft.getTargetPosition() +
                     Math.abs(frontRight.getCurrentPosition() - frontRight.getTargetPosition()) + Math.abs(backRight.getCurrentPosition() - backRight.getTargetPosition()));
             double sumInchesError = sumEncoderError / COUNTS_PER_INCH;
-            if (sumInchesError < 0.4){
+            if (sumInchesError < 0.65){
                 break;
             }
 
