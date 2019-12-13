@@ -48,7 +48,7 @@ public class WebcamVision extends LinearOpMode {
                                 object.getRight(), object.getBottom());
                     }
                 }
-                telemetry.addData("Conclusion is ", TwoStonesGetPosition(objects));
+                telemetry.addData("Conclusion is ", REDTwoStonesGetPosition(objects));
 
             }
             telemetry.update();
@@ -56,7 +56,7 @@ public class WebcamVision extends LinearOpMode {
 
     }
 
-    private CustomPhoneCameraSkyStone.SkyStonePosition TwoStonesGetPosition(List<Recognition> stones){
+    private CustomPhoneCameraSkyStone.SkyStonePosition REDTwoStonesGetPosition(List<Recognition> stones){
         if (stones == null){
             return CustomPhoneCameraSkyStone.SkyStonePosition.UNKNOWN;
         }
@@ -110,4 +110,6 @@ public class WebcamVision extends LinearOpMode {
         }
         return position;
     }
+
+
 }

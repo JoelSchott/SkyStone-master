@@ -85,7 +85,7 @@ public class CustomPhoneCameraSkyStone {
         return null;
     }
 
-    public static SkyStonePosition TwoStonesGetPosition(List<Recognition> stones){
+    public static SkyStonePosition REDTwoStonesGetPosition(List<Recognition> stones){
         if (stones == null){
             return SkyStonePosition.UNKNOWN;
         }
@@ -128,6 +128,54 @@ public class CustomPhoneCameraSkyStone {
         }
         else{
             position = SkyStonePosition.LEFT;
+        }
+        return position;
+    }
+
+    public static CustomPhoneCameraSkyStone.SkyStonePosition BLUETwoStonesGetPosition(List<Recognition> stones){
+        if (stones == null){
+            return CustomPhoneCameraSkyStone.SkyStonePosition.UNKNOWN;
+        }
+        if (stones.size() < 2){
+            return CustomPhoneCameraSkyStone.SkyStonePosition.UNKNOWN;
+        }
+
+        CustomPhoneCameraSkyStone.SkyStonePosition position;
+        Recognition leftStone = null;
+        Recognition rightStone = null;
+
+        while(stones.size() > 2){
+            int indexToRemove = 0;
+            double lowestConfidence = 1;
+            for (int i = 0; i < stones.size(); i++){
+                if (stones.get(i).getConfidence() < lowestConfidence){
+                    lowestConfidence = stones.get(i).getConfidence();
+                    indexToRemove = i;
+                }
+            }
+            stones.remove(indexToRemove);
+        }
+
+        double firstMidpoint = (stones.get(0).getLeft() + stones.get(0).getRight())/(2.0);
+        double secondMidpoint = (stones.get(1).getLeft() + stones.get(1).getRight())/(2.0);
+
+        if (firstMidpoint < secondMidpoint){
+            leftStone = stones.get(0);
+            rightStone = stones.get(1);
+        }
+        else{
+            rightStone = stones.get(0);
+            leftStone = stones.get(1);
+        }
+
+        if (leftStone.getLabel().equals("Skystone") && rightStone.getLabel().equals("Stone")){
+            position = CustomPhoneCameraSkyStone.SkyStonePosition.LEFT;
+        }
+        else if (leftStone.getLabel().equals("Stone") && rightStone.getLabel().equals("Skystone")){
+            position = CustomPhoneCameraSkyStone.SkyStonePosition.MIDDLE;
+        }
+        else{
+            position = CustomPhoneCameraSkyStone.SkyStonePosition.RIGHT;
         }
         return position;
     }

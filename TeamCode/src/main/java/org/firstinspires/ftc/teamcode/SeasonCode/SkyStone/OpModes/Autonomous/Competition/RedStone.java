@@ -62,6 +62,7 @@ public class RedStone extends LinearOpMode {
         waitForStart();
 
         base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 13.5, 4);
+        base.drivetrain.setCurrentAngleAs(180);
 
         base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.8, 180, 2);
 
@@ -80,7 +81,7 @@ public class RedStone extends LinearOpMode {
                 telemetry.addLine();
             }
         }
-        location = CustomPhoneCameraSkyStone.TwoStonesGetPosition(vision.getObjects());
+        location = CustomPhoneCameraSkyStone.REDTwoStonesGetPosition(vision.getObjects());
         telemetry.addData("Position is " , location.name());
         telemetry.update();
 

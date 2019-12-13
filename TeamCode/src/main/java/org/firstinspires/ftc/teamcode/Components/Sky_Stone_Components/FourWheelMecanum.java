@@ -263,9 +263,6 @@ public class FourWheelMecanum extends RobotComponent {
 
         runTime.reset();
         while (absoluteError > 2 && runTime.seconds() < timeOut && base().getOpMode().opModeIsActive()){
-
-
-
             absoluteError = Math.abs(targetDegrees - getProcessedAngle());
             if (absoluteError > 180){
                 absoluteError = 360 - absoluteError;
@@ -294,7 +291,6 @@ public class FourWheelMecanum extends RobotComponent {
     public void driveTurn(double forward, double right, double targetDegrees, double minTurnSpeed, double maxTurnSpeed, boolean turnLeft){
 
         setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        setModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
         double averageEncoders = 0;
 
@@ -302,6 +298,7 @@ public class FourWheelMecanum extends RobotComponent {
         double absoluteError = Math.abs(targetDegrees - getProcessedAngle());
 
         while (averageEncoders / COUNTS_PER_INCH < distance || absoluteError > 2){
+
             averageEncoders = (Math.abs(frontRight.getCurrentPosition()) + Math.abs(frontLeft.getCurrentPosition()) +
                     Math.abs(backLeft.getCurrentPosition()) + Math.abs(backRight.getCurrentPosition())) / 4.0;
 
@@ -312,7 +309,7 @@ public class FourWheelMecanum extends RobotComponent {
             double relativeRight = (Math.sin(angle)*right) - (Math.cos(angle)*forward);
 
             double scaledError = (distance - (averageEncoders / COUNTS_PER_INCH))/distance;
-            if (relativeForward > 0.1 && relativeRight > 0.1){
+            if (relativeForward > 0.1 || relativeRight > 0.1){
                 scaledError = Math.sqrt(scaledError);
             }
             else{
@@ -369,7 +366,23 @@ public class FourWheelMecanum extends RobotComponent {
             frontRight.setPower(rightFrontPower);
             backRight.setPower(rightBackPower);
 
+            base.getTelemetry().addData("Encoder inches are " , averageEncoders / COUNTS_PER_INCH);
+            base.getTelemetry().addData("target distance is ", distance);
+            base.getTelemetry().addData("absolute error is ", absoluteError);
+            base.getTelemetry().addData("scaled error is " ,scaledError);
+            base.getTelemetry().addLine();
+            base.getTelemetry().addData("relative forward is ", relativeForward);
+            base.getTelemetry().addData("relative right is ", relativeRight);
+            base.getTelemetry().addData("turn power is ", turnPower);
+            base.getTelemetry().addLine();
+            base.getTelemetry().addData("front right powers i ", rightFrontPower);
+            base.getTelemetry().addData("front left power is ", leftFrontPower);
+            base.getTelemetry().addData("back left power is ", leftBackPower);
+            base.getTelemetry().addData("back right power is ", rightBackPower);
+            base.getTelemetry().update();
         }
+
+
 
         stop();
 
