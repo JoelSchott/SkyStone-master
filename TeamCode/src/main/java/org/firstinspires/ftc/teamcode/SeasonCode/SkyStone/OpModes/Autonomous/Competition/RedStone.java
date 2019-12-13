@@ -114,7 +114,7 @@ public class RedStone extends LinearOpMode {
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 2, 4);
 
                 //stops collecting
-                base.collector.stop();
+                base.collector.collect(0.4);
 
                 //goes left to prepare to go under bridge
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 39, 5);
@@ -158,7 +158,7 @@ public class RedStone extends LinearOpMode {
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 4, 2);
 
                 //stops collecting
-                base.collector.stop();
+                base.collector.collect(0.4);
 
                 //goes left to prepare to go under bridge
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 45, 5);
@@ -206,7 +206,7 @@ public class RedStone extends LinearOpMode {
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 6, 4);
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 6, 4);
 
-                //stops collecting
+                // collects more slowly to maintain block
                 base.collector.collect(0.5);
 
                 //goes left to prepare to go under bridge
@@ -296,8 +296,8 @@ public class RedStone extends LinearOpMode {
                 base.drivetrain.encoderDrive(0.5, FourWheelMecanum.Direction.FORWARD, 10, 4);
                 base.drivetrain.encoderDrive(0.5, FourWheelMecanum.Direction.BACK, 16, 4);
 
-                //stops collecting
-                base.collector.stop();
+                //collects more slowly to keep block in
+                base.collector.collect(0.4);
 
                 //turns to go under bridge
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,1, 90, 4);
@@ -337,8 +337,8 @@ public class RedStone extends LinearOpMode {
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 6, 2);
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 4, 2);
 
-                //stops collecting
-                base.collector.stop();
+                //keeps block in
+                base.collector.collect(0.4);
 
                 //goes left to prepare to go under bridge
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 45, 5);

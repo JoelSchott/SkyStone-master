@@ -369,7 +369,7 @@ public class FourWheelMecanum extends RobotComponent {
             base.getTelemetry().addData("Encoder inches are " , averageEncoders / COUNTS_PER_INCH);
             base.getTelemetry().addData("target distance is ", distance);
             base.getTelemetry().addData("absolute error is ", absoluteError);
-            base.getTelemetry().addData("scaled error is " ,scaledError);
+            base.getTelemetry().addData("forward/right multiplier is " , scaledError);
             base.getTelemetry().addLine();
             base.getTelemetry().addData("relative forward is ", relativeForward);
             base.getTelemetry().addData("relative right is ", relativeRight);
