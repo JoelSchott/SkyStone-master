@@ -129,7 +129,7 @@ public class WebcamTeleOp extends LinearOpMode {
 
 
             CustomPhoneCameraSkyStone.SkyStonePosition position = CustomPhoneCameraSkyStone.REDTwoStonesGetPosition(base.webcam.getObjects());
-            telemetry.addLine("Block position is "+ position.name());
+            telemetry.addLine("red block position is "+ position.name());
             if (position != null){
                 for (Recognition stone : base.webcam.getObjects()){
                     telemetry.addData("Stone with label ", stone.getLabel());

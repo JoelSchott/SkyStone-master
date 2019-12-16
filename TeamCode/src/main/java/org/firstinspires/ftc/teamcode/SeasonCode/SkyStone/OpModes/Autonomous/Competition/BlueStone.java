@@ -36,7 +36,7 @@ public class BlueStone extends LinearOpMode {
     private static final double MIDDLE_FIRST_DISTANCE_TO_WALL = 40;
     private static final double MIDDLE_SECOND_DISTANCE_TO_WALL = 20.5;
 
-    private static final double LEFT_FIRST_DISTANCE_TO_WALL = 50.5;
+    private static final double LEFT_FIRST_DISTANCE_TO_WALL = 50.2;
     private static final double LEFT_SECOND_DISTANCE_TO_WALL = 27;
 
 
@@ -124,14 +124,14 @@ public class BlueStone extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 270, 5);
 
                 //spits out block
-                base.collector.spew(1);
+                base.collector.spew(0.25);
                 sleep(SPEW_TIME);
 
                 //stops collector
                 base.collector.stop();
 
                 //turns back
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 182, 6);
+                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 184, 6);
 
                 //drives to second skystone
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE + 15, 9);
@@ -143,7 +143,7 @@ public class BlueStone extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.5, 180, 3);
 
                 //strafes left to get in front of block
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 15.5, 6);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 12.5, 6);
 
                 //starts collecting
                 base.collector.collect(1);
@@ -156,7 +156,7 @@ public class BlueStone extends LinearOpMode {
                 base.collector.collect(0.4);
 
                 //goes back and right to prepare to go under bridge
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_RIGHT, 32, 5);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_RIGHT, 34, 5);
 
                 //drives to be in building zone
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 36, 4);
@@ -165,13 +165,13 @@ public class BlueStone extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 270,  7);
 
                 //releases second block
-                base.collector.spew(1);
+                base.collector.spew(0.25);
                 sleep(SPEW_TIME);
 
                 base.collector.stop();
 
                 //strafes to park on line
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_RIGHT, 16, 3);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 16, 3);
 
                 break;
 
@@ -205,7 +205,7 @@ public class BlueStone extends LinearOpMode {
                 base.collector.collect(0.4);
 
                 //goes right to prepare to go under bridge
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 13, 5);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 15, 5);
 
                 //turns back to starting angle
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,0.5, 180, 2);
@@ -217,7 +217,7 @@ public class BlueStone extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 270, 5);
 
                 //spits out block
-                base.collector.spew(1);
+                base.collector.spew(0.25);
                 sleep(SPEW_TIME);
 
                 //stops collector
@@ -235,7 +235,7 @@ public class BlueStone extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.5, 180, 3);
 
                 //strafes left to get in front of block
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 16, 6);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 12.5, 6);
 
                 //starts collecting
                 base.collector.collect(1);
@@ -251,29 +251,29 @@ public class BlueStone extends LinearOpMode {
                 base.collector.collect(0.4);
 
                 //goes back and right to prepare to go under bridge
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_RIGHT, 30, 5);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_RIGHT, 36, 5);
 
                 //drives to be in building zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 35, 4);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 34, 4);
 
                 //turns around
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 269,  7);
 
                 //releases second block
-                base.collector.spew(1);
+                base.collector.spew(0.25);
                 sleep(SPEW_TIME);
 
                 base.collector.stop();
 
                 //parks on line
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 10, 3);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 14, 3);
 
                 break;
 
             case LEFT:
 
                 //strafes back and left to line up
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 22, 6);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 24.7, 6);
 
                 //rotates to face forward
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.6, 180, 2);
@@ -304,7 +304,7 @@ public class BlueStone extends LinearOpMode {
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, LEFT_BRIDGE_DISTANCE, 9);
 
                 //spits out block
-                base.collector.spew(1);
+                base.collector.spew(0.25);
                 sleep(SPEW_TIME);
 
                 //stops collector
@@ -345,16 +345,15 @@ public class BlueStone extends LinearOpMode {
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 23, 4);
 
                 //turns around
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 250,  7);
+                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 270,  7);
 
                 //releases second block
-                base.collector.spew(1);
+                base.collector.spew(0.25);
                 sleep(SPEW_TIME);
 
                 base.collector.stop();
 
                 //strafes to park on line
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_RIGHT, 5, 3);
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 16, 4);
 
                 break;

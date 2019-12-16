@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCameraSkyStone;
@@ -7,7 +9,8 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 
-//@Autonomous(name = "Vision Test")
+@Disabled
+@Autonomous(name = "Vision Test")
 public class VisionTest extends LinearOpMode {
 
     private CustomPhoneCameraSkyStone vision;

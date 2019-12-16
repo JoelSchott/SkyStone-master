@@ -64,7 +64,7 @@ public class MainTeleOp extends LinearOpMode {
             double right = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
 
-            double scale = 0.3;
+            double scale = 0.7;
             if (driveMode == DrivetrainMode.SLOW_MODE){
                 forward = forward * scale;
                 right = right * scale;
@@ -171,8 +171,6 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addLine();
             telemetry.addLine("angle is " + base.drivetrain.getProcessedAngle() + " degrees");
             telemetry.addLine();
-            telemetry.addData("rotator position is " , base.output.blockRotator.getPosition());
-            telemetry.addData("range distance is ", base.frontRange.customDistanceInInches());
 
             telemetry.update();
 

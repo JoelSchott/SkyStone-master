@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
 
-
-//@Autonomous(name = "Custom Joel Control Octagon", group = "Autonomous")
+@Disabled
+@Autonomous(name = "Custom Joel Control Octagon", group = "Autonomous")
 public class OctagonAuto extends LinearOpMode {
 
     MainBase base;

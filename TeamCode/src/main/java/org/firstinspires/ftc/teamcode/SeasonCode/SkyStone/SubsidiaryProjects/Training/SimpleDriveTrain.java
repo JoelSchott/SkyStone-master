@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.SubsidiaryProjects.Training;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-//@TeleOp(name = "Simple Drive Train", group = "TeleOp")
+@Disabled
+@TeleOp(name = "Simple Drive Train", group = "TeleOp")
 
 public class SimpleDriveTrain extends LinearOpMode {
 

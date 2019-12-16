@@ -1,0 +1,30 @@
+Expansion Hub Portal 1 (DQ15R43N)
+	Expansion Hub 1
+		Motors
+			Port 0 - NeveRest 20 Gearmotor "frontRight"
+			port 1 - NeveRest 20 Gearmotor "backRight"
+			port 2 - Nothing
+			port 3 - NeveRest 20 Gearmotor "rightFly"
+		Servos
+			port 0 - Continuous Rotation Servo "foundation"
+		12C Bus 0
+			port 0 - REV Expansion Hub IMU "imu"
+		12C Bus 1
+			port 0 - MR Gyro "gyro"
+	Expansion Hub 2
+		Motors
+			port 0 - NeveRest 20 Gearmotor "frontLeft"
+			port 1 - NeveRest 20 Gearmotor "backLeft"
+			port 2 - NeveRest 20 Gearmotor "lift"
+			port 3 - NeveRest 20 Gearmotor "leftFly"
+		Servos
+			port 0 - Servo "clamp"
+			port 1 - Servo "rotator"
+			port 2 - Servo "marker"
+		12C Bus 0
+			port 0 - REV Expansion Hub IMU "imu 1"
+		12C Bus 1
+			port 0 - MR Range Sensor "frontRange"
+Webcam (6F425F00)
+
+As of 12/14/2019 (after first meet)

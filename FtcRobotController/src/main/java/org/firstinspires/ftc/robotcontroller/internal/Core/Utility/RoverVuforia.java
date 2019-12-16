@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.robotcontroller.internal.Core.Utility;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -22,6 +23,7 @@ import java.util.List;
  * Created by Joel on 9/15/2018.
  */
 
+@Disabled
 @TeleOp(name="Vuforia Locations")
 
 
