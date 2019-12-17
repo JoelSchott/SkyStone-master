@@ -65,7 +65,7 @@ public class MainBaseWebcam extends RobotBase {
         telemetry.addLine("Made front range");
         telemetry.update();
 
-        drivetrain = new FourWheelMecanum(this, imu, gyro);
+        drivetrain = new FourWheelMecanum(this, imu, gyro, frontRange);
         components[0] = drivetrain;
         telemetry.addLine("created drivetrain");
         telemetry.update();

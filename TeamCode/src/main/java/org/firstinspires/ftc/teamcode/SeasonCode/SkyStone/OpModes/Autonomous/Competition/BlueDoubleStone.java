@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
 import java.util.List;
 
 @Autonomous(name = "Blue Stone", group = "Autonomous")
-public class BlueStone extends LinearOpMode {
+public class BlueDoubleStone extends LinearOpMode {
 
     private MainBase base;
 
@@ -82,6 +82,9 @@ public class BlueStone extends LinearOpMode {
         location = CustomPhoneCameraSkyStone.BLUETwoStonesGetPosition(vision.getObjects());
         telemetry.addData("Position is " , location.name());
         telemetry.update();
+        if (location == CustomPhoneCameraSkyStone.SkyStonePosition.UNKNOWN){
+            location = CustomPhoneCameraSkyStone.SkyStonePosition.MIDDLE;
+        }
 
         base.drivetrain.gyroTurn(0.4, 1, 170, 4);
         base.drivetrain.gyroTurn(0.1,0.2, 180, 3);
@@ -134,7 +137,7 @@ public class BlueStone extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 184, 6);
 
                 //drives to second skystone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE + 15, 9);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE + 15, 9, RIGHT_SECOND_DISTANCE_TO_WALL);
 
                 frontRangeDriveToDistance(RIGHT_SECOND_DISTANCE_TO_WALL);
 
@@ -227,7 +230,7 @@ public class BlueStone extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 182, 6);
 
                 //drives to second skystone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, MIDDLE_BRIDGE_DISTANCE + 18, 9);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, MIDDLE_BRIDGE_DISTANCE + 18, 9, MIDDLE_SECOND_DISTANCE_TO_WALL);
 
                 frontRangeDriveToDistance(MIDDLE_SECOND_DISTANCE_TO_WALL);
 
@@ -313,11 +316,11 @@ public class BlueStone extends LinearOpMode {
                 //turns back
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.7, 182, 6);
 
-                //drives to second skystone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, LEFT_BRIDGE_DISTANCE + 20, 9);
-
                 //straightens out
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.6, 180, 3);
+
+                //drives to second skystone
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, LEFT_BRIDGE_DISTANCE + 20, 9, LEFT_SECOND_DISTANCE_TO_WALL);
 
                 //adjusts distance to wall
                 frontRangeDriveToDistance(LEFT_SECOND_DISTANCE_TO_WALL);

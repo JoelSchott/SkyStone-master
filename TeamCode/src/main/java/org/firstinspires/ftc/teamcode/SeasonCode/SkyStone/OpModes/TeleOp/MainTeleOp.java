@@ -64,7 +64,7 @@ public class MainTeleOp extends LinearOpMode {
             double right = gamepad1.left_stick_x;
             double turn = gamepad1.right_stick_x;
 
-            double scale = 0.7;
+            double scale = 0.5;
             if (driveMode == DrivetrainMode.SLOW_MODE){
                 forward = forward * scale;
                 right = right * scale;

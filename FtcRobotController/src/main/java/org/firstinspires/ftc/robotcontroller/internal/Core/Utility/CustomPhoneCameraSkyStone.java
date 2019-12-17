@@ -87,10 +87,10 @@ public class CustomPhoneCameraSkyStone {
 
     public static SkyStonePosition REDTwoStonesGetPosition(List<Recognition> stones){
         if (stones == null){
-            return SkyStonePosition.MIDDLE;
+            return SkyStonePosition.UNKNOWN;
         }
         if (stones.size() < 2){
-            return SkyStonePosition.MIDDLE;
+            return SkyStonePosition.UNKNOWN;
         }
         SkyStonePosition position;
         Recognition leftStone = null;
@@ -134,10 +134,10 @@ public class CustomPhoneCameraSkyStone {
 
     public static CustomPhoneCameraSkyStone.SkyStonePosition BLUETwoStonesGetPosition(List<Recognition> stones){
         if (stones == null){
-            return CustomPhoneCameraSkyStone.SkyStonePosition.MIDDLE;
+            return SkyStonePosition.UNKNOWN;
         }
         if (stones.size() < 2){
-            return CustomPhoneCameraSkyStone.SkyStonePosition.MIDDLE;
+            return SkyStonePosition.UNKNOWN;
         }
 
         CustomPhoneCameraSkyStone.SkyStonePosition position;

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
 import java.util.List;
 
 @Autonomous(name = "Red Stone", group = "Autonomous")
-public class RedStone extends LinearOpMode {
+public class RedDoubleStone extends LinearOpMode {
 
     private MainBase base;
 
@@ -84,6 +84,9 @@ public class RedStone extends LinearOpMode {
         location = CustomPhoneCameraSkyStone.REDTwoStonesGetPosition(vision.getObjects());
         telemetry.addData("Position is " , location.name());
         telemetry.update();
+        if (location == CustomPhoneCameraSkyStone.SkyStonePosition.UNKNOWN){
+            location = CustomPhoneCameraSkyStone.SkyStonePosition.MIDDLE;
+        }
 
 
         switch(location){
@@ -139,8 +142,7 @@ public class RedStone extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.5, 180, 6);
 
                 //drives to second skystone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, LEFT_BRIDGE_DISTANCE + 24, 9);
-
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, LEFT_BRIDGE_DISTANCE + 24, 9, LEFT_SECOND_DISTANCE_TO_WALL);
                 frontRangeDriveToDistance(LEFT_SECOND_DISTANCE_TO_WALL);
 
 
@@ -232,7 +234,7 @@ public class RedStone extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.6, 180, 6);
 
                 //drives to second skystone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, MIDDLE_BRIDGE_DISTANCE + 18, 9);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, MIDDLE_BRIDGE_DISTANCE + 18, 9, MIDDLE_SECOND_DISTANCE_TO_WALL);
 
                 frontRangeDriveToDistance(MIDDLE_SECOND_DISTANCE_TO_WALL);
 
@@ -315,11 +317,11 @@ public class RedStone extends LinearOpMode {
                 //turns back
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.7, 178, 6);
 
-                //drives to second skystone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE + 22, 9);
-
                 //straightens out
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.6, 180, 3);
+
+                //drives to second skystone
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE + 22, 9, RIGHT_SECOND_DISTANCE_TO_WALL);
 
                 //adjusts distance to wall
                 frontRangeDriveToDistance(RIGHT_SECOND_DISTANCE_TO_WALL);
@@ -350,8 +352,7 @@ public class RedStone extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 1, 83,  7);
 
                 //releases second block
-                base.collector.spew(0.25
-                );
+                base.collector.spew(0.25);
                 sleep(SPEW_TIME);
 
                 base.collector.stop();

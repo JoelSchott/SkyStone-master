@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcontroller.internal.Core.RobotBase;
 import org.firstinspires.ftc.robotcontroller.internal.Core.RobotComponent;
 import org.firstinspires.ftc.robotcontroller.internal.Core.Sensors.MRGyro;
+import org.firstinspires.ftc.robotcontroller.internal.Core.Sensors.MRRange;
 import org.firstinspires.ftc.robotcontroller.internal.Core.Sensors.REVIMU;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ public class FourWheelMecanum extends RobotComponent {
 
     private REVIMU imu;
     private MRGyro gyro;
+    private MRRange frontRange;
 
     private double stopBuffer = 0.05;
 
@@ -72,6 +74,14 @@ public class FourWheelMecanum extends RobotComponent {
         super(BASE);
         imu = IMU;
         gyro = GYRO;
+        initMotors();
+    }
+
+    public FourWheelMecanum(RobotBase BASE, REVIMU IMU, MRGyro GYRO, MRRange FRONT_RANGE){
+        super(BASE);
+        imu = IMU;
+        gyro = GYRO;
+        frontRange = FRONT_RANGE;
         initMotors();
     }
 
@@ -236,6 +246,7 @@ public class FourWheelMecanum extends RobotComponent {
         double distance = radians * ROBOT_RADIUS;
         encoderDrive(speed, distance, distance, -distance, -distance, timeOut);
     }
+
     public void gyroTurn(double minSpeed, double maxSpeed, double targetDegrees, double timeOut){
         boolean turnLeft = true;
         double error = targetDegrees - getProcessedAngle();
@@ -262,6 +273,12 @@ public class FourWheelMecanum extends RobotComponent {
         }
 
         runTime.reset();
+
+        //2.5253 is about 2arctan(pi)
+        double c = (maxSpeed - minSpeed)/2.5253;
+        double theta = 60;
+        double d = (2*3.1416/theta);
+        double addition = (maxSpeed + minSpeed)/2.0;
         while (absoluteError > 2 && runTime.seconds() < timeOut && base().getOpMode().opModeIsActive()){
             absoluteError = Math.abs(targetDegrees - getProcessedAngle());
             if (absoluteError > 180){
@@ -269,7 +286,11 @@ public class FourWheelMecanum extends RobotComponent {
             }
             //double power = (maxSpeed - minSpeed)*absoluteError/180.0 + minSpeed;
             //double power = (maxSpeed-minSpeed)*(Math.log(1+absoluteError))/(Math.log(181)) + minSpeed;
-            double power = (maxSpeed - minSpeed) * Math.pow(absoluteError/180.0, 2.0/5.0) + minSpeed;
+            //double power = (maxSpeed - minSpeed) * Math.pow(absoluteError/180.0, 2.0/5.0) + minSpeed;
+
+            //I derived this all it works in theory
+            //based on arctan function scaled from 0 to 180 with minSpeed at 0 and maxSpeed at theta
+            double power = c * Math.atan(d*(absoluteError - (theta/2.0))) + addition;
 
             if (turnLeft){
                 backLeft.setPower(-power);
@@ -291,11 +312,15 @@ public class FourWheelMecanum extends RobotComponent {
     public void driveTurn(double forward, double right, double targetDegrees, double minTurnSpeed, double maxTurnSpeed, boolean turnLeft){
 
         setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setModes(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         double averageEncoders = 0;
 
         double distance = Math.sqrt(Math.pow(forward,2) + Math.pow(right,2));
         double absoluteError = Math.abs(targetDegrees - getProcessedAngle());
+        if (absoluteError > 180){
+            absoluteError = 360 - absoluteError;
+        }
 
         while (averageEncoders / COUNTS_PER_INCH < distance || absoluteError > 2){
 
@@ -325,7 +350,7 @@ public class FourWheelMecanum extends RobotComponent {
             }
 
             double turnPower = (maxTurnSpeed - minTurnSpeed) * Math.pow(absoluteError/180.0, 2.0/5.0) + minTurnSpeed;
-            if (absoluteError < 2){
+            if (absoluteError <= 2){
                 turnPower = 0;
             }
 
@@ -418,6 +443,36 @@ public class FourWheelMecanum extends RobotComponent {
         }
     }
 
+    public void encoderDrive(double speed, Direction direction, double distance, double timeOut, double frontDistance){
+        if (direction == Direction.FORWARD || direction == Direction.RIGHT || direction == Direction.BACK || direction == Direction.LEFT){
+            distance = distance * 1.4142;
+        }
+        if (direction == Direction.FORWARD){
+            encoderDrive(speed, distance, distance, distance, distance, timeOut, frontDistance);
+        }
+        else if (direction == Direction.FORWARD_LEFT){
+            encoderDrive(speed, 0, distance, distance, 0, timeOut, frontDistance);
+        }
+        else if (direction == Direction.LEFT){
+            encoderDrive(speed, -distance, distance, distance, -distance, timeOut, frontDistance);
+        }
+        else if (direction == Direction.BACK_LEFT){
+            encoderDrive(speed, -distance, 0, 0, -distance, timeOut, frontDistance);
+        }
+        else if (direction == Direction.BACK){
+            encoderDrive(speed, -distance, -distance, -distance, -distance, timeOut, frontDistance);
+        }
+        else if (direction == Direction.BACK_RIGHT){
+            encoderDrive(speed, 0, -distance, -distance, 0, timeOut, frontDistance);
+        }
+        else if (direction == Direction.RIGHT){
+            encoderDrive(speed, distance, -distance, -distance, distance, timeOut, frontDistance);
+        }
+        else if (direction == Direction.FORWARD_RIGHT){
+            encoderDrive(speed, distance, 0, 0, distance, timeOut, frontDistance);
+        }
+    }
+
     public void encoderDrive(double speed, double frontLeftInches, double backLeftInches, double frontRightInches, double backRightInches, double timeout){
 
         int frontLeftTarget = frontLeft.getCurrentPosition() + (int)(frontLeftInches * COUNTS_PER_INCH);
@@ -462,6 +517,56 @@ public class FourWheelMecanum extends RobotComponent {
         }
 
         stop();
+        setModes(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
+
+    public void encoderDrive(double speed, double frontLeftInches, double backLeftInches, double frontRightInches, double backRightInches, double timeout, double frontDistance){
+
+        int frontLeftTarget = frontLeft.getCurrentPosition() + (int)(frontLeftInches * COUNTS_PER_INCH);
+        int backLeftTarget = backLeft.getCurrentPosition() + (int)(backLeftInches * COUNTS_PER_INCH);
+        int frontRightTarget = frontRight.getCurrentPosition() + (int)(frontRightInches * COUNTS_PER_INCH);
+        int backRightTarget = backRight.getCurrentPosition() + (int)(backRightInches * COUNTS_PER_INCH);
+
+        frontLeft.setTargetPosition(frontLeftTarget);
+        backLeft.setTargetPosition(backLeftTarget);
+        frontRight.setTargetPosition(frontRightTarget);
+        backRight.setTargetPosition(backRightTarget);
+
+        setModes(DcMotor.RunMode.RUN_TO_POSITION);
+
+        runTime.reset();
+
+        setPowers(Math.abs(speed));
+
+        int busyMotors = 4;
+        while (base().getOpMode().opModeIsActive() && (runTime.seconds() < timeout) &&
+                (busyMotors > 1)){
+            busyMotors = 0;
+            if (frontLeft.isBusy()){
+                busyMotors ++;
+            }
+            if (backLeft.isBusy()){
+                busyMotors++;
+            }
+            if (frontRight.isBusy()){
+                busyMotors++;
+            }
+            if(backRight.isBusy()){
+                busyMotors++;
+            }
+            double sumEncoderError = Math.abs(frontLeft.getCurrentPosition() - frontLeft.getTargetPosition())+ Math.abs(backLeft.getCurrentPosition() - backLeft.getTargetPosition() +
+                    Math.abs(frontRight.getCurrentPosition() - frontRight.getTargetPosition()) + Math.abs(backRight.getCurrentPosition() - backRight.getTargetPosition()));
+            double sumInchesError = sumEncoderError / COUNTS_PER_INCH;
+            if (sumInchesError < 0.65){
+                break;
+            }
+            if (Math.abs(frontDistance - frontRange.customDistanceInInches()) < 1.5){
+                break;
+            }
+
+        }
+
         setModes(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
