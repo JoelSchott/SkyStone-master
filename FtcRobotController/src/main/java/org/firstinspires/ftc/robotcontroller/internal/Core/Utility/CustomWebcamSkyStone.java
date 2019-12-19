@@ -48,6 +48,16 @@ public class CustomWebcamSkyStone {
     }
 
     public List<Recognition> getObjects(){
+        tfod.setClippingMargins(0,0,0,0);
+        if (tfod != null){
+            List<Recognition> recognitions = tfod.getRecognitions();
+            return recognitions;
+        }
+        return null;
+    }
+
+    public List<Recognition> getObjects(int left, int top, int right, int bottom){
+        tfod.setClippingMargins(left, top, right, bottom);
         if (tfod != null){
             List<Recognition> recognitions = tfod.getRecognitions();
             return recognitions;
