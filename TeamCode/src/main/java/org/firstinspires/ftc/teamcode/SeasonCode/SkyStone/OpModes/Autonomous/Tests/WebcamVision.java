@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCameraSkyStone;
@@ -10,13 +9,19 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 
-@Disabled
 @Autonomous(name = "Webcam Vision Test")
 public class WebcamVision extends LinearOpMode {
 
     private CustomWebcamSkyStone vision;
 
     private List<Recognition> objects;
+
+    private int leftMargin = 0;
+    private int topMargin = 0;
+    private int rightMargin = 0;
+    private int bottomMargin = 0;
+
+    private boolean hideMore = true;
 
     @Override
     public void runOpMode(){
@@ -26,7 +31,50 @@ public class WebcamVision extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
-            objects = vision.getObjects();
+            if (gamepad1.a){
+                hideMore = true;
+            }
+            else if (gamepad1.b){
+                hideMore = false;
+            }
+            if (gamepad1.dpad_up){
+                if (hideMore){
+                    topMargin++;
+                }
+                else if (topMargin > 0){
+                    topMargin --;
+                }
+            }
+            if (gamepad1.dpad_left){
+                if (hideMore){
+                    leftMargin ++;
+                }
+                else if (leftMargin > 0){
+                    leftMargin --;
+                }
+            }
+            if (gamepad1.dpad_down){
+                if (hideMore){
+                    bottomMargin ++;
+                }
+                else if (bottomMargin > 0){
+                    bottomMargin --;
+                }
+            }
+            if (gamepad1.dpad_right){
+                if (hideMore){
+                    rightMargin ++;
+                }
+                else if (rightMargin > 0){
+                    rightMargin --;
+                }
+            }
+            telemetry.addLine("dpad for borders in and out");
+            telemetry.addLine("a button for in ");
+            telemetry.addLine("b button for out");
+            telemetry.addLine();
+            
+            objects = vision.getObjects(leftMargin,topMargin,rightMargin,bottomMargin);
             if (objects != null){
                 telemetry.addData("Stones visible are ", objects.size());
                 int i = 0;
