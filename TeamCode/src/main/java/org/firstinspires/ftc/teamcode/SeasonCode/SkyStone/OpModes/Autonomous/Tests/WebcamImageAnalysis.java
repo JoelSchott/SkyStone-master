@@ -1,17 +1,14 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.vuforia.Frame;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBaseWebcam;
+import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase1Webcam;
 
 @Autonomous(name = "Webcam Image Analysis ", group = "Autonomous")
 public class WebcamImageAnalysis extends LinearOpMode {
@@ -25,7 +22,7 @@ public class WebcamImageAnalysis extends LinearOpMode {
     private VuforiaLocalizer vuforia;
 
 
-    MainBaseWebcam base;
+    MainBase1Webcam base;
 
     CustomConsumer consumer = new CustomConsumer();
     CustomContinuation continuation = new CustomContinuation(consumer);
@@ -33,7 +30,7 @@ public class WebcamImageAnalysis extends LinearOpMode {
 
     public void runOpMode(){
 
-        //base = new MainBaseWebcam(hardwareMap, telemetry, this);
+        //base = new MainBase1Webcam(hardwareMap, telemetry, this);
         initVuforia();
 
         waitForStart();
@@ -41,9 +38,7 @@ public class WebcamImageAnalysis extends LinearOpMode {
         vuforia.getFrameOnce(continuation);
         sleep(2000);
 
-        while(opModeIsActive()){
-            vuforia.getFrameOnce(continuation);
-        }
+        vuforia.getFrameOnce(continuation);
 
 
     }

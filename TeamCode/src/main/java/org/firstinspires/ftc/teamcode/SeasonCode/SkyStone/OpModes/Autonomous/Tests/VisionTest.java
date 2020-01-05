@@ -26,6 +26,7 @@ public class VisionTest extends LinearOpMode {
 
         while(opModeIsActive()){
             objects = vision.getObjects();
+
             if (objects != null){
                 telemetry.addData("Stones visible are ", objects.size());
                 int i = 0;

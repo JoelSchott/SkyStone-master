@@ -74,12 +74,25 @@ public class CustomPhoneCameraSkyStone {
     }
 
     public List<Recognition> getObjects(){
+        tfod.setClippingMargins(0,0,0,0);
         if (tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            if (updatedRecognitions != null) {
-                return updatedRecognitions;
+            List<Recognition> recognitions = tfod.getRecognitions();
+            if (recognitions != null) {
+                return recognitions;
+            }
+        }
+        return null;
+    }
+    public List<Recognition> getObjects(int left, int top, int right, int bottom){
+        tfod.setClippingMargins(left,top,right,bottom);
+        if (tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> recognitions = tfod.getRecognitions();
+            if (recognitions != null) {
+                return recognitions;
             }
         }
         return null;
@@ -180,7 +193,41 @@ public class CustomPhoneCameraSkyStone {
         return position;
     }
 
-    public static SkyStonePosition ThreeStonesGetPosition(List<Recognition> stones){
+    //array of 8 numbers for how much to crop for the following
+    //top, bottom, left for left stone, right for left stone, left for middle stone, right for middle stone
+    // left for right stone, right for right stone
+    public static int[] REDCroppingPositions(List<Recognition> stones){
+        int[] crops = new int[8];
+        if (stones == null){
+            return null;
+        }
+        int indexToKeep = 0;
+        double greatestConfidence = 0;
+        for (int i = 0; i < stones.size(); i++){
+            if (stones.get(i).getConfidence() > greatestConfidence){
+                greatestConfidence = stones.get(i).getConfidence();
+                indexToKeep = i;
+            }
+        }
+        Recognition stone = stones.get(indexToKeep);
+        int width = (int) (stone.getWidth() / 3.0);
+        int buffer = 10;
+        crops[0] = (int) stone.getBottom() - buffer;
+        crops[1] = (int)(stone.getImageHeight() - (stone.getTop() + buffer));
+
+        crops[2] = (int) stone.getLeft() - buffer;
+        crops[3] = (int) (stone.getImageWidth() - (stone.getLeft() + width + buffer));
+
+        crops[4] = (int) (stone.getLeft() + width - buffer);
+        crops[5] = (int) (stone.getImageWidth() - (stone.getRight() - width + buffer));
+
+        crops[6] = (int) (stone.getRight() - width - buffer);
+        crops[7] = (int) (stone.getImageWidth() - (stone.getRight() + buffer));
+
+        return crops;
+    }
+
+    public static SkyStonePosition REDThreeStonesGetPosition(List<Recognition> stones){
         if (stones == null){
             return SkyStonePosition.UNKNOWN;
         }

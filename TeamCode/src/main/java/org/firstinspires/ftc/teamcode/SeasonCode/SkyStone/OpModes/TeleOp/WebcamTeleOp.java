@@ -4,18 +4,22 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCameraSkyStone;
+import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomSounds;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBaseWebcam;
+import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase1Webcam;
+import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase2Webcams;
 
-@TeleOp(name = "Webcam TeleOp", group = "TeleOp")
+@TeleOp(name = "2 Webcam TeleOp", group = "TeleOp")
 public class WebcamTeleOp extends LinearOpMode {
 
-    MainBaseWebcam base;
+    MainBase2Webcams base;
 
     DrivetrainState driveState = DrivetrainState.ROBOT_RELATIVE;
 
     private boolean clamped = false;
     private boolean clampButtonHeld = false;
+
+    private boolean showLeft = true;
 
     private int debugClampCount = 0;
 
@@ -27,13 +31,14 @@ public class WebcamTeleOp extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        base = new MainBaseWebcam(hardwareMap, telemetry, this);
+        base = new MainBase2Webcams(hardwareMap, telemetry, this);
         base.init();
 
         telemetry.clear();
         telemetry.addLine("All Systems Go");
         telemetry.update();
 
+        new CustomSounds(hardwareMap).playSound(CustomSounds.ROGER_ROGER);
 
         waitForStart();
 
@@ -126,12 +131,15 @@ public class WebcamTeleOp extends LinearOpMode {
 
 
             //------------------------------------TELEMETRY--------------------------------------------------------
-
-
-            CustomPhoneCameraSkyStone.SkyStonePosition position = CustomPhoneCameraSkyStone.REDTwoStonesGetPosition(base.webcam.getObjects());
-            telemetry.addLine("red block position is "+ position.name());
-            if (position != null){
-                for (Recognition stone : base.webcam.getObjects()){
+            if (gamepad1.left_bumper){
+                showLeft = true;
+            }
+            else if (gamepad1.right_bumper){
+                showLeft = false;
+            }
+            telemetry.addData("Show left is ", showLeft);
+            if (showLeft){
+                for (Recognition stone : base.leftWebcam.getObjects()){
                     telemetry.addData("Stone with label ", stone.getLabel());
                     telemetry.addData("confidence is ", stone.getConfidence());
                     telemetry.addLine("top, left is " + stone.getTop() + " , " + stone.getLeft());
@@ -140,6 +148,18 @@ public class WebcamTeleOp extends LinearOpMode {
                     telemetry.addLine();
                 }
             }
+            else{
+                for (Recognition stone : base.rightWebcam.getObjects()){
+                    telemetry.addData("Stone with label ", stone.getLabel());
+                    telemetry.addData("confidence is ", stone.getConfidence());
+                    telemetry.addLine("top, left is " + stone.getTop() + " , " + stone.getLeft());
+                    telemetry.addLine("bottom, right is " + stone.getBottom() + " , " + stone.getRight());
+                    telemetry.addData("MIDPOINT IS ", (stone.getLeft() + stone.getRight())/2.0);
+                    telemetry.addLine();
+                }
+            }
+
+
             telemetry.update();
 
 

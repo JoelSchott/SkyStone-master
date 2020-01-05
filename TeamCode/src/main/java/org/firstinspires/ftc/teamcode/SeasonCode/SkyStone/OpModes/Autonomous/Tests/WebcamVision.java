@@ -8,11 +8,12 @@ import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomWebcamS
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
+import java.util.Timer;
 
 @Autonomous(name = "Webcam Vision Test")
 public class WebcamVision extends LinearOpMode {
 
-    private CustomWebcamSkyStone vision;
+    private CustomPhoneCameraSkyStone vision;
 
     private List<Recognition> objects;
 
@@ -21,11 +22,20 @@ public class WebcamVision extends LinearOpMode {
     private int rightMargin = 0;
     private int bottomMargin = 0;
 
+    private boolean leftHeld = false;
+    private boolean topHeld = false;
+    private boolean rightHeld = false;
+    private boolean bottomHeld = false;
+    private boolean xHeld =  false;
+
     private boolean hideMore = true;
+
+    private int intervalIndex = 0;
+    private int[] intervals = {1,5,50,100,200};
 
     @Override
     public void runOpMode(){
-        vision = new CustomWebcamSkyStone(hardwareMap);
+        vision = new CustomPhoneCameraSkyStone(hardwareMap);
         vision.init();
 
         waitForStart();
@@ -37,44 +47,77 @@ public class WebcamVision extends LinearOpMode {
             else if (gamepad1.b){
                 hideMore = false;
             }
-            if (gamepad1.dpad_up){
+
+            if (gamepad1.x && !xHeld){
+                xHeld = true;
+                intervalIndex = (intervalIndex + 1) % intervals.length;
+            }
+            else if (!gamepad1.x){
+                xHeld = false;
+            }
+
+            int change = intervals[intervalIndex];
+            if (gamepad1.dpad_up && !topHeld){
+                topHeld = true;
                 if (hideMore){
-                    topMargin++;
+                    topMargin += change;
                 }
                 else if (topMargin > 0){
-                    topMargin --;
+                    topMargin -= change;
                 }
             }
-            if (gamepad1.dpad_left){
+            else if (!gamepad1.dpad_up){
+                topHeld = false;
+            }
+            if (gamepad1.dpad_left && !leftHeld){
+                leftHeld = true;
                 if (hideMore){
-                    leftMargin ++;
+                    leftMargin += change;
                 }
                 else if (leftMargin > 0){
-                    leftMargin --;
+                    leftMargin -= change;
                 }
             }
-            if (gamepad1.dpad_down){
+            else if (!gamepad1.dpad_left){
+                leftHeld = false;
+            }
+            if (gamepad1.dpad_down && !bottomHeld){
+                bottomHeld = true;
                 if (hideMore){
-                    bottomMargin ++;
+                    bottomMargin += change;
                 }
                 else if (bottomMargin > 0){
-                    bottomMargin --;
+                    bottomMargin -= change;
                 }
             }
-            if (gamepad1.dpad_right){
+            else if (!gamepad1.dpad_down){
+                bottomHeld = false;
+            }
+            if (gamepad1.dpad_right && !rightHeld){
+                rightHeld = true;
                 if (hideMore){
-                    rightMargin ++;
+                    rightMargin += change;
                 }
                 else if (rightMargin > 0){
-                    rightMargin --;
+                    rightMargin -= change;
                 }
             }
-            telemetry.addLine("dpad for borders in and out");
-            telemetry.addLine("a button for in ");
+            else if (!gamepad1.dpad_right){
+                rightHeld = false;
+            }
+            telemetry.addLine("dpad for borders in or out");
+            telemetry.addLine("a button for in");
             telemetry.addLine("b button for out");
+            telemetry.addData("hide more is ", hideMore);
+            telemetry.addData("interval is ", intervals[intervalIndex]);
             telemetry.addLine();
-            
+            telemetry.addData("left margin is ", leftMargin);
+            telemetry.addData("top margin is ", topMargin);
+            telemetry.addData("right margin is ", rightMargin);
+            telemetry.addData("bottom margin is ", bottomMargin);
+
             objects = vision.getObjects(leftMargin,topMargin,rightMargin,bottomMargin);
+
             if (objects != null){
                 telemetry.addData("Stones visible are ", objects.size());
                 int i = 0;
@@ -88,8 +131,8 @@ public class WebcamVision extends LinearOpMode {
                                 object.getRight(), object.getBottom());
                     }
                 }
-                for (Recognition object : objects){
-                    if (!object.getLabel().equals("Skystone")){
+                for (Recognition object : objects) {
+                    if (!object.getLabel().equals("Skystone")) {
                         telemetry.addData("Label is ", object.getLabel());
                         telemetry.addData("Confidence is ", object.getConfidence());
                         telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
@@ -98,7 +141,6 @@ public class WebcamVision extends LinearOpMode {
                                 object.getRight(), object.getBottom());
                     }
                 }
-                telemetry.addData("Conclusion is ", REDTwoStonesGetPosition(objects));
 
             }
             telemetry.update();

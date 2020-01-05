@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.Foundation
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.Output;
 
-public class MainBaseWebcam extends RobotBase {
+public class MainBase2Webcams extends RobotBase {
 
     public FourWheelMecanum drivetrain;
     public Foundation foundation;
@@ -28,11 +28,12 @@ public class MainBaseWebcam extends RobotBase {
     public MRGyro gyro;
     public MRRange frontRange;
 
-    public CustomWebcamSkyStone webcam;
+    public CustomWebcamSkyStone leftWebcam;
+    public CustomWebcamSkyStone rightWebcam;
 
     private RobotComponent[] components = new RobotComponent[4];
 
-    public MainBaseWebcam(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode mode){
+    public MainBase2Webcams(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode mode){
 
         super(hardwareMap, telemetry, mode);
         telemetry.addLine("creating Main Base");
@@ -42,8 +43,11 @@ public class MainBaseWebcam extends RobotBase {
     @Override
     public void init(){
 
-        webcam = new CustomWebcamSkyStone(hardwareMap);
-        webcam.init();
+        leftWebcam = new CustomWebcamSkyStone(hardwareMap, "leftWebcam");
+        leftWebcam.init();
+
+        rightWebcam = new CustomWebcamSkyStone(hardwareMap, "rightWebcam");
+        rightWebcam.init();
 
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
 

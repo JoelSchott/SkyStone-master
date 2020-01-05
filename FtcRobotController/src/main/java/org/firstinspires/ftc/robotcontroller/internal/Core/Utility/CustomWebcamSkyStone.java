@@ -28,8 +28,11 @@ public class CustomWebcamSkyStone {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
-    public CustomWebcamSkyStone(HardwareMap map){
+    private String name;
+
+    public CustomWebcamSkyStone(HardwareMap map, String name){
         hardwareMap = map;
+        this.name = name;
     }
 
     public VuforiaLocalizer getVuforia(){
@@ -55,7 +58,6 @@ public class CustomWebcamSkyStone {
         }
         return null;
     }
-
     public List<Recognition> getObjects(int left, int top, int right, int bottom){
         tfod.setClippingMargins(left, top, right, bottom);
         if (tfod != null){
@@ -76,7 +78,7 @@ public class CustomWebcamSkyStone {
     private void initVuforia(){
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam");
+        parameters.cameraName = hardwareMap.get(WebcamName.class, name);
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }

@@ -8,15 +8,14 @@ import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomWebcamS
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
+import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase1Webcam;
 
 import java.util.List;
 
 @Autonomous(name = "Blue Stone", group = "Autonomous")
 public class BlueDoubleStone extends LinearOpMode {
 
-    private MainBase base;
-
-    private CustomWebcamSkyStone vision;
+    private MainBase1Webcam base;
 
     private List<Recognition> stones;
 
@@ -48,12 +47,9 @@ public class BlueDoubleStone extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        base = new MainBase(hardwareMap,telemetry,this);
+        base = new MainBase1Webcam(hardwareMap,telemetry,this);
         base.init();
         base.drivetrain.setInitalAngle(0);
-
-        vision = new CustomWebcamSkyStone(hardwareMap);
-        vision.init();
 
         telemetry.clearAll();
         telemetry.addLine("May the Force be with us");
@@ -70,7 +66,7 @@ public class BlueDoubleStone extends LinearOpMode {
 
         sleep(750);
 
-        stones = vision.getObjects();
+        stones = base.webcam.getObjects();
         if (stones != null){
             for (Recognition stone : stones){
                 telemetry.addLine(String.format("stone type %s with confidence %f", stone.getLabel(), stone.getConfidence()));
@@ -79,7 +75,7 @@ public class BlueDoubleStone extends LinearOpMode {
                 telemetry.addLine();
             }
         }
-        location = CustomPhoneCameraSkyStone.BLUETwoStonesGetPosition(vision.getObjects());
+        location = CustomPhoneCameraSkyStone.BLUETwoStonesGetPosition(base.webcam.getObjects());
         telemetry.addData("Position is " , location.name());
         telemetry.update();
         if (location == CustomPhoneCameraSkyStone.SkyStonePosition.UNKNOWN){

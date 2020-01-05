@@ -584,7 +584,7 @@ public class FourWheelMecanum extends RobotComponent {
         private double dt;
 
         private double maxVelocity = 20;
-        private double acceleration = 0.25;
+        private double acceleration = 1;
         private double minimumPower = 0.2;
 
         private ArrayList<DcMotor> usedMotors = new ArrayList<>();
