@@ -6,14 +6,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCameraSkyStone;
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomWebcamSkyStone;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase1Webcam;
 
 import java.util.List;
 import java.util.Timer;
 
-@Autonomous(name = "Webcam Vision Test")
+@Autonomous(name = "Cropping manipulation")
 public class WebcamVision extends LinearOpMode {
 
-    private CustomPhoneCameraSkyStone vision;
+    private MainBase1Webcam base;
 
     private List<Recognition> objects;
 
@@ -35,8 +36,8 @@ public class WebcamVision extends LinearOpMode {
 
     @Override
     public void runOpMode(){
-        vision = new CustomPhoneCameraSkyStone(hardwareMap);
-        vision.init();
+        base = new MainBase1Webcam(hardwareMap, telemetry, this);
+        base.init();
 
         waitForStart();
 
@@ -116,7 +117,7 @@ public class WebcamVision extends LinearOpMode {
             telemetry.addData("right margin is ", rightMargin);
             telemetry.addData("bottom margin is ", bottomMargin);
 
-            objects = vision.getObjects(leftMargin,topMargin,rightMargin,bottomMargin);
+            objects = base.webcam.getObjects(leftMargin,topMargin,rightMargin,bottomMargin);
 
             if (objects != null){
                 telemetry.addData("Stones visible are ", objects.size());
