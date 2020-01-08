@@ -4,13 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
+import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase2Sensors;
 
 import java.sql.SQLOutput;
 
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
 
-    MainBase base;
+    MainBase2Sensors base;
 
     DrivetrainState driveState = DrivetrainState.FIELD_RELATIVE;
     DrivetrainMode driveMode = DrivetrainMode.FULL_SPEED;
@@ -30,7 +31,7 @@ public class MainTeleOp extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        base = new MainBase(hardwareMap, telemetry, this);
+        base = new MainBase2Sensors(hardwareMap, telemetry, this);
         base.init();
 
         telemetry.clear();
@@ -171,6 +172,9 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addLine();
             telemetry.addLine("angle is " + base.drivetrain.getProcessedAngle() + " degrees");
             telemetry.addLine();
+            telemetry.addData("front range is ", base.frontRange.customDistanceInInches());
+            telemetry.addData("right range is ", base.rightRange.customDistanceInInches());
+
 
             telemetry.update();
 
