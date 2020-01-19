@@ -248,30 +248,23 @@ public class FourWheelMecanum extends RobotComponent {
     }
 
     public void gyroTurn(double minSpeed, double maxSpeed, double targetDegrees, double timeOut){
-        boolean turnLeft = true;
-        double error = targetDegrees - getProcessedAngle();
-        double absoluteError = Math.abs(error);
+        boolean turnLeft;
+        double absoluteError = Math.abs(targetDegrees - getProcessedAngle());
+
+        if (targetDegrees > getProcessedAngle()){
+            turnLeft = true;
+        }
+        else{
+            turnLeft = false;
+        }
+
+        if (absoluteError > 180){
+            turnLeft = !turnLeft;
+        }
+
         if (absoluteError > 180){
             absoluteError = 360 - absoluteError;
         }
-
-        if (absoluteError < 180){
-            if (error > 0){
-                turnLeft = true;
-            }
-            else{
-                turnLeft = false;
-            }
-        }
-        else{
-            if (error > 0){
-                turnLeft = false;
-            }
-            else{
-                turnLeft = true;
-            }
-        }
-
         runTime.reset();
 
         //2.5253 is about 2arctan(pi)
