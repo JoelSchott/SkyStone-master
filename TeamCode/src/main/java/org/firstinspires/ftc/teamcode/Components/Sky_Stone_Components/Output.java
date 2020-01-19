@@ -30,15 +30,15 @@ public class Output extends RobotComponent {
 
     }
     //This controls the lift motion downwards
-    public void liftDown(double power){
+    public void liftDown(){
         lift.setPower(-0.75);
     }
     //This controls the outtake system that moves the block outside of the robot
-    public void outRotate(double power){
+    public void outRotate(){
         blockRotator.setPosition(1.0);
     }
     //This rotates the outtake system back to the pick-up position
-    public void inRotate(double power){
+    public void inRotate(){
         blockRotator.setPosition(0.12);
     }
     //This system clamps onto the block and keeps it secure

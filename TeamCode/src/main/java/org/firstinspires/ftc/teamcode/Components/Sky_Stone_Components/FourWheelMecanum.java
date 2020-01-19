@@ -473,6 +473,12 @@ public class FourWheelMecanum extends RobotComponent {
         }
     }
 
+    public void encoderDrive(double speed, double xInches, double yInches, double timeout){
+        double frontLeftDistance = yInches + (1.414 * xInches);
+        double frontRightDistance = yInches - (1.414 * xInches);
+        encoderDrive(speed, frontLeftDistance, frontRightDistance, frontRightDistance, frontLeftDistance, timeout);
+    }
+
     public void encoderDrive(double speed, double frontLeftInches, double backLeftInches, double frontRightInches, double backRightInches, double timeout){
 
         int frontLeftTarget = frontLeft.getCurrentPosition() + (int)(frontLeftInches * COUNTS_PER_INCH);

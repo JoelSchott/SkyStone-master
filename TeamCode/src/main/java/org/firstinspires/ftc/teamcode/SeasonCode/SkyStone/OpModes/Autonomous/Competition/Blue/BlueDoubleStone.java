@@ -1,13 +1,11 @@
-package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Competition;
+package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Competition.Blue;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCameraSkyStone;
-import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomWebcamSkyStone;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
-import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase1Webcam;
 
 import java.util.List;

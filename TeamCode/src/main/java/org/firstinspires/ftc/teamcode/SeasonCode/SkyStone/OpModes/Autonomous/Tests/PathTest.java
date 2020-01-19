@@ -23,10 +23,6 @@ public class PathTest extends LinearOpMode {
         base = new MainBase(hardwareMap, telemetry, this);
         base.init();
 
-        telemetry.addLine("Resetting encoders");
-        base.drivetrain.setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        base.drivetrain.setModes(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.update();
 
         telemetry.addLine("All Systems Go");
         telemetry.update();
@@ -35,7 +31,7 @@ public class PathTest extends LinearOpMode {
 
         waitForStart();
 
-        base.drivetrain.driveTurn(-40, 0, 180, 0.1, 0.7, true);
+        base.drivetrain.encoderDrive(0.8, 20, 40, 9);
 
     }
 

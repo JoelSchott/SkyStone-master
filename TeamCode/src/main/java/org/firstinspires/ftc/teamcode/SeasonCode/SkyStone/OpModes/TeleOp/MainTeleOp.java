@@ -3,15 +3,13 @@ package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
-import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase2Sensors;
-
-import java.sql.SQLOutput;
 
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
 
-    MainBase2Sensors base;
+    MainBase base;
 
     DrivetrainState driveState = DrivetrainState.FIELD_RELATIVE;
     DrivetrainMode driveMode = DrivetrainMode.FULL_SPEED;
@@ -31,7 +29,7 @@ public class MainTeleOp extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        base = new MainBase2Sensors(hardwareMap, telemetry, this);
+        base = new MainBase(hardwareMap, telemetry, this);
         base.init();
 
         telemetry.clear();
@@ -101,6 +99,27 @@ public class MainTeleOp extends LinearOpMode {
             //--------------------------------------FOUNDATION MOVING----------------------------------------------
             base.foundation.moveServo(gamepad2.left_stick_y);
 
+            //------------------------------------ARMS FOR AUTONOMOUS--------------------------------------------
+            if (gamepad1.left_bumper){
+                base.arms.setLeftPower(-1);
+            }
+            else if (gamepad1.left_trigger > 0.5){
+                base.arms.setLeftPower(1);
+            }
+            else{
+                base.arms.setLeftPower(0);
+            }
+
+            if (gamepad1.right_bumper) {
+                base.arms.setRightPower(-1);
+            }
+            else if (gamepad1.right_trigger > 0.5){
+                base.arms.setRightPower(1);
+            }
+            else{
+                base.arms.setRightPower(0);
+            }
+
 
 
             //------------------------------------COLLECTING-------------------------------------------------------------
@@ -142,16 +161,16 @@ public class MainTeleOp extends LinearOpMode {
 
             //----------ROTATION------------------
             if (gamepad2.dpad_left){
-                base.output.inRotate(0);
+                base.output.inRotate();
             }
             else if (gamepad2.dpad_right){
-                base.output.outRotate(0);
+                base.output.outRotate();
             }
             if (gamepad2.left_trigger > 0.5){
-                base.output.blockRotator.setPosition(base.output.blockRotator.getPosition() + 0.01);
+                base.output.blockRotator.setPosition(base.output.blockRotator.getPosition() - 0.01);
             }
             else if (gamepad2.right_trigger > 0.5){
-                base.output.blockRotator.setPosition(base.output.blockRotator.getPosition() - 0.01);
+                base.output.blockRotator.setPosition(base.output.blockRotator.getPosition() + 0.01);
             }
 
 
@@ -172,9 +191,11 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addLine();
             telemetry.addLine("angle is " + base.drivetrain.getProcessedAngle() + " degrees");
             telemetry.addLine();
-            telemetry.addData("front range is ", base.frontRange.customDistanceInInches());
-            telemetry.addData("right range is ", base.rightRange.customDistanceInInches());
-
+            telemetry.addData("front raw range is ", base.frontRange.distance(DistanceUnit.INCH));
+            telemetry.addData("front custom range is ", base.frontRange.customDistanceInInches());
+            telemetry.addLine();
+            telemetry.addData("left raw range is ", base.leftRange.distance(DistanceUnit.INCH));
+            telemetry.addData("left custom range is ", base.leftRange.customDistanceInInches());
 
             telemetry.update();
 

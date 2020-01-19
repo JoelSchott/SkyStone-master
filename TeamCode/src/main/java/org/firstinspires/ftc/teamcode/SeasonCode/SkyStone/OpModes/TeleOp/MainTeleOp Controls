@@ -10,10 +10,10 @@ a ----------------------- switches to field-relative drive
 b ----------------------- switches to robot-relative drive
 x ----------------------- switches to full speed mode
 y ----------------------- switches to slow mode
-left bumper (higher up) -
-right bumper (higher up)-
-left trigger ------------
-right trigger -----------
+left bumper (higher up) - left arm up
+right bumper (higher up)- right arm up
+left trigger ------------ left arm down
+right trigger ----------- right arm down
 D-pad left -------------- sets angle to 180 degrees for field-relative drive
 D-pad bottom ------------ sets angle to 270 degrees for field-relative drive
 D-pad right ------------- sets angle to 0 degrees for field-relative drive
@@ -34,10 +34,10 @@ x  ---------------------- toggle clamp/unclamp of block
 y -----------------------
 left bumper (higher up) - capstone servo back in
 right bumper (higher up)- placing capstone
-left trigger ------------
-right trigger -----------
-D-pad left -------------- rotator in
+left trigger ------------ fine-tune rotator in
+right trigger ----------- fine-turn rotator out
+D-pad left -------------- rotator to in position
 D-pad bottom ------------
-D-pad right ------------- rotator out
+D-pad right ------------- rotator to out position
 D-pad top ---------------
 

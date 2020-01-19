@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Competition;
+package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Competition.Red;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,13 +9,14 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase1Webcam;
+import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBaseWebcam;
 
 import java.util.List;
 
 @Autonomous(name = "Red Stone", group = "Autonomous")
 public class RedDoubleStone extends LinearOpMode {
 
-    private MainBase1Webcam base;
+    private MainBaseWebcam base;
 
     private List<Recognition> stones;
 
@@ -24,6 +25,7 @@ public class RedDoubleStone extends LinearOpMode {
     private final static double DISTANCE_ADJUSTMENT_SPEED = 0.09;
 
     private final static double FIRST_DISTANCE = 31;
+    private final static double FIRST_LEFT_DISTANCE = 13.5;
 
     private static final double LEFT_BRIDGE_DISTANCE = 29.2;
     private static final double MIDDLE_BRIDGE_DISTANCE = 25;
@@ -39,7 +41,6 @@ public class RedDoubleStone extends LinearOpMode {
     private static final double RIGHT_SECOND_DISTANCE_TO_WALL = 27;
 
 
-
     private static final int SPEW_TIME = 300;
 
     private CustomPhoneCameraSkyStone.SkyStonePosition location = CustomPhoneCameraSkyStone.SkyStonePosition.UNKNOWN;
@@ -47,7 +48,7 @@ public class RedDoubleStone extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        base = new MainBase1Webcam(hardwareMap,telemetry,this);
+        base = new MainBaseWebcam(hardwareMap,telemetry,this);
         base.init();
         base.drivetrain.setInitalAngle(180);
 
@@ -64,6 +65,7 @@ public class RedDoubleStone extends LinearOpMode {
         base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, 0.8, 180, 2);
 
         frontRangeDriveToDistance(FIRST_DISTANCE);
+        leftRangeDriveToDistance(FIRST_LEFT_DISTANCE);
 
         base.drivetrain.setPowers(0);
 
@@ -97,7 +99,6 @@ public class RedDoubleStone extends LinearOpMode {
 
                 //rotates to initial angle
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,0.9, 180, 2);
-
 
                 //drives to specific distance from the wall
                 frontRangeDriveToDistance(LEFT_FIRST_DISTANCE_TO_WALL);
@@ -373,7 +374,25 @@ public class RedDoubleStone extends LinearOpMode {
                 base.drivetrain.setPowers(-DISTANCE_ADJUSTMENT_SPEED);
             }
         }
+    }
 
+    private void leftRangeDriveToDistance(double distance){
+        if (base.leftRange.customDistanceInInches() > distance){
+            while (base.leftRange.customDistanceInInches() > distance){
+                base.drivetrain.frontRight.setPower(DISTANCE_ADJUSTMENT_SPEED);
+                base.drivetrain.frontLeft.setPower(-DISTANCE_ADJUSTMENT_SPEED);
+                base.drivetrain.backLeft.setPower(DISTANCE_ADJUSTMENT_SPEED);
+                base.drivetrain.backRight.setPower(-DISTANCE_ADJUSTMENT_SPEED);
+            }
+        }
+        else if (base.leftRange.customDistanceInInches() < distance){
+            while (base.leftRange.customDistanceInInches() < distance){
+                base.drivetrain.frontRight.setPower(-DISTANCE_ADJUSTMENT_SPEED);
+                base.drivetrain.frontLeft.setPower(DISTANCE_ADJUSTMENT_SPEED);
+                base.drivetrain.backLeft.setPower(-DISTANCE_ADJUSTMENT_SPEED);
+                base.drivetrain.backRight.setPower(DISTANCE_ADJUSTMENT_SPEED);
+            }
+        }
     }
 
 }

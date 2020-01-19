@@ -7,12 +7,12 @@ import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCa
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomSounds;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase1Webcam;
-import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase2Webcams;
+
 
 @TeleOp(name = "2 Webcam TeleOp", group = "TeleOp")
 public class WebcamTeleOp extends LinearOpMode {
 
-    MainBase2Webcams base;
+    MainBase1Webcam base;
 
     DrivetrainState driveState = DrivetrainState.ROBOT_RELATIVE;
 
@@ -31,7 +31,7 @@ public class WebcamTeleOp extends LinearOpMode {
     @Override
     public void runOpMode(){
 
-        base = new MainBase2Webcams(hardwareMap, telemetry, this);
+        base = new MainBase1Webcam(hardwareMap, telemetry, this);
         base.init();
 
         telemetry.clear();
@@ -114,10 +114,10 @@ public class WebcamTeleOp extends LinearOpMode {
 
             //----------ROTATION------------------
             if (gamepad2.dpad_left){
-                base.output.inRotate(0);
+                base.output.inRotate();
             }
             else if (gamepad2.dpad_right){
-                base.output.outRotate(0);
+                base.output.outRotate();
             }
 
 
@@ -139,7 +139,7 @@ public class WebcamTeleOp extends LinearOpMode {
             }
             telemetry.addData("Show left is ", showLeft);
             if (showLeft){
-                for (Recognition stone : base.leftWebcam.getObjects()){
+                for (Recognition stone : base.webcam.getObjects()){
                     telemetry.addData("Stone with label ", stone.getLabel());
                     telemetry.addData("confidence is ", stone.getConfidence());
                     telemetry.addLine("top, left is " + stone.getTop() + " , " + stone.getLeft());
@@ -149,7 +149,7 @@ public class WebcamTeleOp extends LinearOpMode {
                 }
             }
             else{
-                for (Recognition stone : base.rightWebcam.getObjects()){
+                for (Recognition stone : base.webcam.getObjects()){
                     telemetry.addData("Stone with label ", stone.getLabel());
                     telemetry.addData("confidence is ", stone.getConfidence());
                     telemetry.addLine("top, left is " + stone.getTop() + " , " + stone.getLeft());
