@@ -35,7 +35,7 @@ public class MainBase extends RobotBase {
     public MainBase(HardwareMap hardwareMap, Telemetry telemetry, LinearOpMode mode){
 
         super(hardwareMap, telemetry, mode);
-        telemetry.addLine("creating Main Base");
+        telemetry.addLine("Creating Main Base");
         telemetry.update();
     }
 
