@@ -25,6 +25,7 @@ public class FourWheelMecanum extends RobotComponent {
     private REVIMU imu;
     private MRGyro gyro;
     private MRRange frontRange;
+    private MRRange leftRange;
 
     private double stopBuffer = 0.05;
 
@@ -82,6 +83,15 @@ public class FourWheelMecanum extends RobotComponent {
         imu = IMU;
         gyro = GYRO;
         frontRange = FRONT_RANGE;
+        initMotors();
+    }
+
+    public FourWheelMecanum(RobotBase BASE, REVIMU IMU, MRGyro GYRO, MRRange FRONT_RANGE, MRRange LEFT_RANGE){
+        super(BASE);
+        imu = IMU;
+        gyro = GYRO;
+        frontRange = FRONT_RANGE;
+        leftRange = LEFT_RANGE;
         initMotors();
     }
 
@@ -272,7 +282,7 @@ public class FourWheelMecanum extends RobotComponent {
         double theta = 60;
         double d = (2*3.1416/theta);
         double addition = (maxSpeed + minSpeed)/2.0;
-        while (absoluteError > 2 && runTime.seconds() < timeOut && base().getOpMode().opModeIsActive()){
+        while (absoluteError > 1 && runTime.seconds() < timeOut && base().getOpMode().opModeIsActive()){
             absoluteError = Math.abs(targetDegrees - getProcessedAngle());
             if (absoluteError > 180){
                 absoluteError = 360 - absoluteError;
@@ -406,6 +416,36 @@ public class FourWheelMecanum extends RobotComponent {
 
     }
 
+    public void straightEncoderDrive(double speed, Direction direction, double distance, double timeOut){
+        if (direction == Direction.FORWARD || direction == Direction.RIGHT || direction == Direction.BACK || direction == Direction.LEFT){
+            distance = distance * 1.4142;
+        }
+        if (direction == Direction.FORWARD){
+            straightEncoderDrive(speed, distance, distance, distance, distance, timeOut);
+        }
+        else if (direction == Direction.FORWARD_LEFT){
+            straightEncoderDrive(speed, 0, distance, distance, 0, timeOut);
+        }
+        else if (direction == Direction.LEFT){
+            straightEncoderDrive(speed, -distance, distance, distance, -distance, timeOut);
+        }
+        else if (direction == Direction.BACK_LEFT){
+            straightEncoderDrive(speed, -distance, 0, 0, -distance, timeOut);
+        }
+        else if (direction == Direction.BACK){
+            straightEncoderDrive(speed, -distance, -distance, -distance, -distance, timeOut);
+        }
+        else if (direction == Direction.BACK_RIGHT){
+            straightEncoderDrive(speed, 0, -distance, -distance, 0, timeOut);
+        }
+        else if (direction == Direction.RIGHT){
+            straightEncoderDrive(speed, distance, -distance, -distance, distance, timeOut);
+        }
+        else if (direction == Direction.FORWARD_RIGHT){
+            straightEncoderDrive(speed, distance, 0, 0, distance, timeOut);
+        }
+    }
+
     public void encoderDrive(double speed, Direction direction, double distance, double timeOut){
         if (direction == Direction.FORWARD || direction == Direction.RIGHT || direction == Direction.BACK || direction == Direction.LEFT){
             distance = distance * 1.4142;
@@ -466,10 +506,89 @@ public class FourWheelMecanum extends RobotComponent {
         }
     }
 
+    public void fastEncoderDrive(double speed, double rightInches, double forwardInches, double timeOut){
+
+    }
+
+
     public void encoderDrive(double speed, double xInches, double yInches, double timeout){
         double frontLeftDistance = yInches + (1.414 * xInches);
         double frontRightDistance = yInches - (1.414 * xInches);
         encoderDrive(speed, frontLeftDistance, frontRightDistance, frontRightDistance, frontLeftDistance, timeout);
+    }
+
+    public void straightEncoderDrive(double speed, double frontLeftInches, double backLeftInches, double frontRightInches, double backRightInches, double timeout){
+        int frontLeftTarget = frontLeft.getCurrentPosition() + (int)(frontLeftInches * COUNTS_PER_INCH);
+        int backLeftTarget = backLeft.getCurrentPosition() + (int)(backLeftInches * COUNTS_PER_INCH);
+        int frontRightTarget = frontRight.getCurrentPosition() + (int)(frontRightInches * COUNTS_PER_INCH);
+        int backRightTarget = backRight.getCurrentPosition() + (int)(backRightInches * COUNTS_PER_INCH);
+
+        frontLeft.setTargetPosition(frontLeftTarget);
+        backLeft.setTargetPosition(backLeftTarget);
+        frontRight.setTargetPosition(frontRightTarget);
+        backRight.setTargetPosition(backRightTarget);
+
+        setModes(DcMotor.RunMode.RUN_TO_POSITION);
+
+        runTime.reset();
+
+        int initialHeading = gyro.heading();
+
+        setPowers(Math.abs(speed));
+
+        int busyMotors = 4;
+        while (base().getOpMode().opModeIsActive() && (runTime.seconds() < timeout) &&
+                (busyMotors > 1)){
+            busyMotors = 0;
+            if (frontLeft.isBusy()){
+                busyMotors ++;
+            }
+            if (backLeft.isBusy()){
+                busyMotors++;
+            }
+            if (frontRight.isBusy()){
+                busyMotors++;
+            }
+            if(backRight.isBusy()){
+                busyMotors++;
+            }
+            double sumEncoderError = Math.abs(frontLeft.getCurrentPosition() - frontLeft.getTargetPosition())+ Math.abs(backLeft.getCurrentPosition() - backLeft.getTargetPosition() +
+                    Math.abs(frontRight.getCurrentPosition() - frontRight.getTargetPosition()) + Math.abs(backRight.getCurrentPosition() - backRight.getTargetPosition()));
+            double sumInchesError = sumEncoderError / COUNTS_PER_INCH;
+            if (sumInchesError < 0.65){
+                break;
+            }
+
+            if (gyro.heading() != initialHeading){
+                boolean turnLeft;
+                if (gyro.heading() < initialHeading){
+                    turnLeft = true;
+                }
+                else{
+                    turnLeft = false;
+                }
+                if (Math.abs(gyro.heading() - initialHeading) > 180){
+                    turnLeft = !turnLeft;
+                }
+
+                double scale = 0.8;
+                if (turnLeft){
+                    frontLeft.setPower(speed * scale);
+                    backLeft.setPower(speed * scale);
+                }
+                else{
+                    frontRight.setPower(speed * scale);
+                    backRight.setPower(speed * scale);
+                }
+            }
+            else{
+                setPowers(Math.abs(speed));
+            }
+
+        }
+
+        stop();
+        setModes(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void encoderDrive(double speed, double frontLeftInches, double backLeftInches, double frontRightInches, double backRightInches, double timeout){

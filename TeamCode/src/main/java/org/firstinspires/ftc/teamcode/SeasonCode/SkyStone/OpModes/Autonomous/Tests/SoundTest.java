@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomSounds;
 
-@Autonomous(name = "Sound Test")
+//@Autonomous(name = "Sound Test")
 public class SoundTest extends LinearOpMode {
 
     CustomSounds sounds;

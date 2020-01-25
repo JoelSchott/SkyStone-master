@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
@@ -15,7 +16,19 @@ public class MainTeleOp extends LinearOpMode {
     DrivetrainMode driveMode = DrivetrainMode.FULL_SPEED;
 
     private boolean clamped = false;
+
     private boolean gamepad2xHeld = false;
+    private boolean gamepad2upHeld = false;
+    private boolean gamepad2downHeld = false;
+    private boolean gamepad2leftHeld = false;
+    private boolean gamepad2rightHeld = false;
+
+    private static final int[] ENCODER_PLACING_POSITIONS = {-143, -756, -1231, -1745, -2235, -3016, -1785};
+    private int towerLevel = 0;
+    private boolean automateLift = false;
+
+    private ElapsedTime rotatorTimer = new ElapsedTime();
+    private static final int ROTATE_TIME = 1000;
 
     enum DrivetrainState{
         ROBOT_RELATIVE,FIELD_RELATIVE
@@ -37,6 +50,7 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.addLine("May be the Force be with us");
         telemetry.update();
 
+        base.arms.rightArm.setPosition(0.1);
 
         waitForStart();
 
@@ -79,6 +93,7 @@ public class MainTeleOp extends LinearOpMode {
                     base.drivetrain.fieldRelativeDrive(forward, right, turn);
                     break;
             }
+         //   if (gamepad)
 
 
             //setting angles
@@ -107,17 +122,14 @@ public class MainTeleOp extends LinearOpMode {
                 base.arms.setLeftPower(1);
             }
             else{
-                base.arms.setLeftPower(0);
+                base.arms.setLeftPower(-0.1);
             }
 
             if (gamepad1.right_bumper) {
-                base.arms.setRightPower(-1);
+                base.arms.setRightPosition(0.1);
             }
             else if (gamepad1.right_trigger > 0.5){
-                base.arms.setRightPower(1);
-            }
-            else{
-                base.arms.setRightPower(0);
+                base.arms.setRightPosition(0.68);
             }
 
 
@@ -154,25 +166,97 @@ public class MainTeleOp extends LinearOpMode {
 
             if (Math.abs(gamepad2.right_stick_y) > 0.1){
                 base.output.lift.setPower(gamepad2.right_stick_y);
+                automateLift = false;
             }
             else{
                 base.output.lift.setPower(0);
             }
 
-            //----------ROTATION------------------
-            if (gamepad2.dpad_left){
-                base.output.inRotate();
-            }
-            else if (gamepad2.dpad_right){
-                base.output.outRotate();
-            }
-            if (gamepad2.left_trigger > 0.5){
-                base.output.blockRotator.setPosition(base.output.blockRotator.getPosition() - 0.01);
-            }
-            else if (gamepad2.right_trigger > 0.5){
-                base.output.blockRotator.setPosition(base.output.blockRotator.getPosition() + 0.01);
+            if (gamepad2.y){
+                automateLift = true;
             }
 
+            if (gamepad2.dpad_up){
+                if (!gamepad2upHeld){
+                    gamepad2upHeld = true;
+                    towerLevel++;
+                }
+            }
+            else{
+                gamepad2upHeld = false;
+            }
+
+            if (gamepad2.dpad_down){
+                if (!gamepad2downHeld){
+                    gamepad2downHeld = true;
+                    towerLevel--;
+                }
+            }
+            else{
+                gamepad2downHeld = false;
+            }
+            if (towerLevel > 6){
+                towerLevel = 6;
+            }
+            if (towerLevel < 0){
+                towerLevel = 0;
+            }
+
+            if (automateLift){
+
+                int targetPosition = ENCODER_PLACING_POSITIONS[towerLevel];
+                int currentPosition = base.output.lift.getCurrentPosition();
+                int error = Math.abs(targetPosition - currentPosition);
+
+                double power = 1;
+                if (error < 200){
+                    power = 0.3;
+                }
+
+                //negative power to lift motor is up
+                //if targetPosition is less than current, we should go up
+
+                if (targetPosition < currentPosition){
+                    base.output.lift.setPower(-power);
+                }
+                else{
+                    base.output.lift.setPower(power);
+                }
+
+                if (Math.abs(targetPosition - base.output.lift.getCurrentPosition()) < 10){
+                    automateLift = false;
+                    base.output.lift.setPower(0);
+                }
+            }
+
+
+            //----------ROTATION------------------
+            if (gamepad2.dpad_left){
+                if (!gamepad2leftHeld){
+                    gamepad2leftHeld = true;
+                    base.output.inRotate();
+                }
+            }
+            else{
+                gamepad2leftHeld = false;
+            }
+            if (gamepad2.dpad_right){
+                if (!gamepad2rightHeld){
+                    gamepad2rightHeld = true;
+                    base.output.outRotate();
+                }
+            }
+            else{
+                gamepad2rightHeld = false;
+            }
+
+
+            if (gamepad2.left_trigger > 0.2){
+                base.output.blockRotator.setPosition(base.output.blockRotator.getPosition() - 0.01);
+            }
+            else if (gamepad2.right_trigger > 0.2){
+                base.output.blockRotator.setPosition(base.output.blockRotator.getPosition() + 0.01);
+            }
 
             //----------CAPSTONE-----------------
             if (gamepad2.right_bumper){
@@ -186,19 +270,11 @@ public class MainTeleOp extends LinearOpMode {
             //------------------------------------TELEMETRY--------------------------------------------------------
 
 
-            telemetry.addData("DRIVE STATE is ", driveState);
-            telemetry.addData("DRIVE MODE is ", driveMode);
+            telemetry.addData("DRIVE STATE :", driveState);
+            telemetry.addData("DRIVE MODE :", driveMode);
             telemetry.addLine();
-            telemetry.addLine("angle is " + base.drivetrain.getProcessedAngle() + " degrees");
-            telemetry.addLine();
-            telemetry.addData("front raw range is ", base.frontRange.distance(DistanceUnit.INCH));
-            telemetry.addData("front custom range is ", base.frontRange.customDistanceInInches());
-            telemetry.addLine();
-            telemetry.addData("left raw range is ", base.leftRange.distance(DistanceUnit.INCH));
-            telemetry.addData("left custom range is ", base.leftRange.customDistanceInInches());
-
+            telemetry.addData("TOWER LEVEL IS ", towerLevel);
             telemetry.update();
-
         }
     }
 }

@@ -64,6 +64,7 @@ public class CustomWebcamSkyStone {
             List<Recognition> recognitions = tfod.getRecognitions();
             return recognitions;
         }
+
         return null;
     }
 

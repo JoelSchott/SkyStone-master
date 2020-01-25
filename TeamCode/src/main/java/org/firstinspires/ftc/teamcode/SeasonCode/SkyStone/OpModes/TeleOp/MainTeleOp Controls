@@ -31,13 +31,13 @@ right joystick button ---
 a  ---------------------- collects
 b  ---------------------- spews
 x  ---------------------- toggle clamp/unclamp of block
-y -----------------------
+y ----------------------- raises/lowers lift to position
 left bumper (higher up) - capstone servo back in
 right bumper (higher up)- placing capstone
 left trigger ------------ fine-tune rotator in
 right trigger ----------- fine-turn rotator out
 D-pad left -------------- rotator to in position
-D-pad bottom ------------
+D-pad bottom ------------ counts the level one lower
 D-pad right ------------- rotator to out position
-D-pad top ---------------
+D-pad top --------------- counts the level one highter
 

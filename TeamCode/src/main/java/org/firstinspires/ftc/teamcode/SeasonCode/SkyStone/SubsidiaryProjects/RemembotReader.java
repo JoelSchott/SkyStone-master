@@ -11,7 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 
-@Autonomous(name = "Remembot Reader")
+//@Autonomous(name = "Remembot Reader")
 public class RemembotReader extends LinearOpMode {
 
     private DcMotor frontLeft;

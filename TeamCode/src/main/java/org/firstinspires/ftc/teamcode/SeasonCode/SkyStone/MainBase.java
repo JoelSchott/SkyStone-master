@@ -66,7 +66,7 @@ public class MainBase extends RobotBase {
         telemetry.addLine("made left range");
         telemetry.update();
 
-        drivetrain = new FourWheelMecanum(this, imu, gyro, frontRange);
+        drivetrain = new FourWheelMecanum(this, imu, gyro, frontRange, leftRange);
         components[0] = drivetrain;
         telemetry.addLine("created drivetrain");
         telemetry.update();

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
 
-@Autonomous (name = "Path Test")
+//@Autonomous (name = "Path Test")
 public class PathTest extends LinearOpMode {
 
     MainBase base;

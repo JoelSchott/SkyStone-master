@@ -1,19 +1,20 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Competition.Red;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
+import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomSounds;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
 
 import java.util.List;
 
-//@Autonomous(name = "Red Foundation Bridge", group = "Autonomous")
-public class RedFoundationBridge extends LinearOpMode {
-
+//@Autonomous(name = "Red Foundation Wall", group = "Autonomous")
+public class RedFoundationWall extends LinearOpMode {
     private MainBase base;
+
+    private List<Recognition> stones;
 
     private final static double DRIVE_SPEED = 1.0;
     private final static double MINIMUM_TURN_SPEED = 0.1;
@@ -26,6 +27,8 @@ public class RedFoundationBridge extends LinearOpMode {
         base.init();
         base.drivetrain.setInitalAngle(180);
 
+        new CustomSounds(hardwareMap).playSound(CustomSounds.ROGER_ROGER);
+
         waitForStart();
 
         //strafe back and right to get in front of foundation
@@ -34,7 +37,7 @@ public class RedFoundationBridge extends LinearOpMode {
         //rotates to starting angle
         base.drivetrain.gyroTurn(0.1,0.7, 180, 2);
 
-        //strafes right to foundation
+        //strafes right near foundation
         base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 26, 5);
 
         //slowly strafes flush to foundation
@@ -58,13 +61,11 @@ public class RedFoundationBridge extends LinearOpMode {
         sleep(500);
         base.foundation.moveServo(0);
 
-        //drives forward and left for parking near bridge
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD_LEFT, 20, 5);
+        //drives back and left for parking near bridge
+        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK_LEFT, 20, 5);
 
         //strafes left to park near bridge
         base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 20, 5);
 
     }
-
-
 }

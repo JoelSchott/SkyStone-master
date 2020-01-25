@@ -14,6 +14,11 @@ public class MRGyro extends RobotSensor {
     public MRGyro(RobotBase base, String name){
         super(base, name);
         gyro = base().getMapper().mapMRGyro(name);
+        gyro.calibrate();
+        while (gyro.isCalibrating()){
+            base.getTelemetry().addLine("Calibrating Gyro...");
+            base.getTelemetry().update();
+        }
     }
 
     public int heading(){

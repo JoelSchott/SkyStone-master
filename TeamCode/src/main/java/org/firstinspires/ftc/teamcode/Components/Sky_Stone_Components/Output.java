@@ -14,9 +14,14 @@ public class Output extends RobotComponent {
     public Servo clamp;
     public Servo marker;
 
+    private double rotatorInPosition = 0.09;
+    private double rotatorOutPosition = 0.97;
+
     public Output (RobotBase base){
         super(base);
         lift = base.getMapper().mapMotor("lift");
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         blockRotator = base.getMapper().mapServo("rotator", Servo.Direction.FORWARD);
         clamp = base.getMapper().mapServo("clamp", Servo.Direction.FORWARD);
         marker = base.getMapper().mapServo("marker", Servo.Direction.FORWARD);
@@ -35,12 +40,13 @@ public class Output extends RobotComponent {
     }
     //This controls the outtake system that moves the block outside of the robot
     public void outRotate(){
-        blockRotator.setPosition(1.0);
+        blockRotator.setPosition(rotatorOutPosition);
     }
     //This rotates the outtake system back to the pick-up position
     public void inRotate(){
-        blockRotator.setPosition(0.12);
+        blockRotator.setPosition(rotatorInPosition);
     }
+
     //This system clamps onto the block and keeps it secure
     public void clampGrab(){
         clamp.setPosition(0.8);

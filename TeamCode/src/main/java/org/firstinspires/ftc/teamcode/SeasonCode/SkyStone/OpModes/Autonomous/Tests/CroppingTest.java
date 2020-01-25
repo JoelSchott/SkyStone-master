@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCameraSkyStone;
 
-@Autonomous(name = "Cropping Test")
+//@Autonomous(name = "Cropping Test")
 public class CroppingTest extends LinearOpMode {
 
     private CustomPhoneCameraSkyStone vision;

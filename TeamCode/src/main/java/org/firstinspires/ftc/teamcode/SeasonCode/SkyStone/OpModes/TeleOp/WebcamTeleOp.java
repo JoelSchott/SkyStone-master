@@ -113,11 +113,11 @@ public class WebcamTeleOp extends LinearOpMode {
             }
 
             //----------ROTATION------------------
-            if (gamepad2.dpad_left){
+            if (gamepad2.left_trigger > 0.2){
                 base.output.inRotate();
             }
-            else if (gamepad2.dpad_right){
-                base.output.outRotate();
+            else if (gamepad2.right_trigger > 0.2){
+                base.output.inRotate();
             }
 
 
@@ -138,6 +138,8 @@ public class WebcamTeleOp extends LinearOpMode {
                 showLeft = false;
             }
             telemetry.addData("Show left is ", showLeft);
+            telemetry.addData("conclusion is ", CustomPhoneCameraSkyStone.REDTwoStonesGetPosition(base.webcam.getObjects()));
+
             if (showLeft){
                 for (Recognition stone : base.webcam.getObjects()){
                     telemetry.addData("Stone with label ", stone.getLabel());

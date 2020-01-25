@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
-@TeleOp(name = "Remembot Writer", group = "TeleOp")
+//@TeleOp(name = "Remembot Writer", group = "TeleOp")
 public class RemembotWriter extends LinearOpMode {
 
     private DcMotor frontLeft;

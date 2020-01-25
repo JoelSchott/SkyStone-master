@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Te
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.vuforia.Image;
+import com.vuforia.PIXEL_FORMAT;
+import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
@@ -9,8 +12,9 @@ import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase1Webcam;
+import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBaseWebcam;
 
-@Autonomous(name = "Webcam Image Analysis ", group = "Autonomous")
+//@Autonomous(name = "Webcam Image Analysis ", group = "Autonomous")
 public class WebcamImageAnalysis extends LinearOpMode {
 
     private static final String VUFORIA_KEY =
@@ -22,7 +26,7 @@ public class WebcamImageAnalysis extends LinearOpMode {
     private VuforiaLocalizer vuforia;
 
 
-    MainBase1Webcam base;
+    MainBaseWebcam base;
 
     CustomConsumer consumer = new CustomConsumer();
     CustomContinuation continuation = new CustomContinuation(consumer);
@@ -33,12 +37,45 @@ public class WebcamImageAnalysis extends LinearOpMode {
         //base = new MainBase1Webcam(hardwareMap, telemetry, this);
         initVuforia();
 
+        telemetry.addLine("waiting for start");
+        telemetry.update();
         waitForStart();
 
-        vuforia.getFrameOnce(continuation);
-        sleep(2000);
+        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+        vuforia.setFrameQueueCapacity(1);
 
-        vuforia.getFrameOnce(continuation);
+        while (opModeIsActive()){
+            VuforiaLocalizer.CloseableFrame vuFrame = null;
+
+            if (!vuforia.getFrameQueue().isEmpty()) {
+                try {
+                    vuFrame = vuforia.getFrameQueue().take();
+                } catch (InterruptedException e) {
+                    //Thread.currentThread().interrupt();
+                    telemetry.addLine("interrupted error");
+                    telemetry.update();
+                }
+
+                if (vuFrame == null) continue;
+
+                for (int i = 0; i < vuFrame.getNumImages(); i++) {
+                    Image img = vuFrame.getImage(i);
+                    if (img.getFormat() == PIXEL_FORMAT.RGB565) {
+                        telemetry.addData("capacity is ", img.getPixels().capacity());
+                        double sum = 0;
+                        telemetry.update();
+//                        Bitmap bm = Bitmap.createBitmap(img.getWidth(), img.getHeight(), Bitmap.Config.RGB_565);
+//                        bm.copyPixelsFromBuffer(img.getPixels());
+//                        Mat mat = bitmapToMat(bm, CvType.CV_8UC3);
+//                        Mat ret = p.processFrame(mat);
+//                        Bitmap displayBitmap = Bitmap.createBitmap(ret.width(), ret.height(), Bitmap.Config.RGB_565);
+//                        Utils.matToBitmap(ret, displayBitmap);
+//                        dashboard.sendImage(displayBitmap);
+
+                    }
+                }
+            }
+        }
 
 
     }
@@ -61,6 +98,7 @@ public class WebcamImageAnalysis extends LinearOpMode {
         public void accept(com.vuforia.Frame frame){
             telemetry.addData("Number of images is ", frame.getNumImages());
             telemetry.update();
+
         }
     }
 

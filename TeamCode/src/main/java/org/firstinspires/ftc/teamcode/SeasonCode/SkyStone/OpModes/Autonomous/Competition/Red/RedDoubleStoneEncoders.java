@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBaseWebcam;
 
 import java.util.List;
 
-@Autonomous(name = "Red Double Stone Arms", group = "Autonomous")
-public class RedDoubleStoneArms extends LinearOpMode {
+@Autonomous(name = "Red Double Stone Encoders", group = "Autonomous")
+public class RedDoubleStoneEncoders extends LinearOpMode {
 
     private MainBaseWebcam base;
 
@@ -57,7 +57,7 @@ public class RedDoubleStoneArms extends LinearOpMode {
 
         waitForStart();
 
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 10.5, 4);
+        base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 10.5, 4);
 
         base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, MAX_TURN_SPEED, 180, 2);
 
@@ -91,138 +91,90 @@ public class RedDoubleStoneArms extends LinearOpMode {
             case LEFT:
 
                 //drives forward after seeing stones
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 4, 4);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 4, 4);
 
                 //strafes right next to the stones
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 14, 6);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 14, 6);
 
                 //drives to specific distance from both walls
                 frontRangeDriveToDistance(LEFT_FIRST_DISTANCE_TO_WALL);
                 leftRangeDriveToDistance(COLLECTING_DISTANCE);
 
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
-
                 grabBlock();
 
                 //drive left to go to building zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 4);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 4);
 
                 //drive to other zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, LEFT_BRIDGE_DISTANCE, 6);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, LEFT_BRIDGE_DISTANCE, 6);
 
                 releaseBlock();
 
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
-
                 //drives to second stone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, LEFT_BRIDGE_DISTANCE + 16, 8);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, LEFT_BRIDGE_DISTANCE + 16, 8);
 
                 //drives right next to blocks
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, AROUND_GATE_DISTANCE - 1.5, 5);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, AROUND_GATE_DISTANCE - 1.5, 5);
 
                 //drives to distance from both walls
                 frontRangeDriveToDistance(LEFT_SECOND_DISTANCE_TO_WALL);
                 leftRangeDriveToDistance(COLLECTING_DISTANCE);
 
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
-
-                base.drivetrain.encoderDrive(0.2, FourWheelMecanum.Direction.FORWARD, 1.2, 1);
+                base.drivetrain.straightEncoderDrive(0.2, FourWheelMecanum.Direction.FORWARD, 1.2, 1);
 
                 grabBlock();
 
                 //drives left to go to building zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 6);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 6);
 
                 //drives back to go to other zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, LEFT_BRIDGE_DISTANCE + 18, 8);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, LEFT_BRIDGE_DISTANCE + 18, 8);
 
                 //turns to face gate side of line
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, MAX_TURN_SPEED, 160, 5);
 
                 //releases and parks
                 base.arms.setRightPosition(0.1);
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 15, 5);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 15, 5);
 
                 break;
 
             case MIDDLE:
 
                 //strafes right next to the stones
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 14, 6);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 14, 6);
 
                 //drives to specific distance from both walls
                 frontRangeDriveToDistance(MIDDLE_FIRST_DISTANCE_TO_WALL);
                 leftRangeDriveToDistance(COLLECTING_DISTANCE);
 
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
-
                 grabBlock();
 
                 //drive left to go to building zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 4);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 4);
 
                 //drive to other zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, MIDDLE_BRIDGE_DISTANCE, 6);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, MIDDLE_BRIDGE_DISTANCE, 6);
 
                 releaseBlock();
 
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
-
                 //drives to second stone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, MIDDLE_BRIDGE_DISTANCE + 16, 8);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, MIDDLE_BRIDGE_DISTANCE + 16, 8);
 
                 //drives right next to blocks
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, AROUND_GATE_DISTANCE - 1, 5);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, AROUND_GATE_DISTANCE - 1, 5);
 
                 //drives to distance from both walls
                 frontRangeDriveToDistance(MIDDLE_SECOND_DISTANCE_TO_WALL);
                 leftRangeDriveToDistance(COLLECTING_DISTANCE);
 
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
-
                 grabBlock();
 
                 //drives left to go to building zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 6);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 6);
 
                 //drives back to go to other zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, MIDDLE_BRIDGE_DISTANCE + 16, 8);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, MIDDLE_BRIDGE_DISTANCE + 16, 8);
 
                 //turns to face gate side of line
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, MAX_TURN_SPEED, 160, 5);
@@ -230,73 +182,49 @@ public class RedDoubleStoneArms extends LinearOpMode {
                 releaseBlock();
 
                 //park
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 10, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 10, 2);
 
                 break;
 
             case RIGHT:
 
                 //drives back after seeing stones
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 4.5, 4);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 4.5, 4);
 
                 //strafes right next to the stones
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 14, 6);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 14, 6);
 
                 //drives to specific distance from both walls
                 frontRangeDriveToDistance(RIGHT_FIRST_DISTANCE_TO_WALL);
                 leftRangeDriveToDistance(COLLECTING_DISTANCE);
 
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
-
                 grabBlock();
 
                 //drive left to go to building zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 4);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 4);
 
                 //drive to other zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, RIGHT_BRIDGE_DISTANCE, 6);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, RIGHT_BRIDGE_DISTANCE, 6);
 
                 releaseBlock();
 
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
-
                 //drives to second stone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE + 16, 8);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE + 16, 8);
 
                 //drives right next to blocks
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, AROUND_GATE_DISTANCE - 3, 5);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, AROUND_GATE_DISTANCE - 3, 5);
 
                 //drives to distance from both walls
                 frontRangeDriveToDistance(RIGHT_SECOND_DISTANCE_TO_WALL);
                 leftRangeDriveToDistance(COLLECTING_DISTANCE);
 
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
-
                 grabBlock();
 
                 //drives left to go to building zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 6);
-
-                //rotates to initial angle
-                base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 180, 2);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, AROUND_GATE_DISTANCE, 6);
 
                 //drives back to go to other zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, RIGHT_BRIDGE_DISTANCE + 18, 8);
+                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, RIGHT_BRIDGE_DISTANCE + 18, 8);
 
                 //turns to face gate side of line
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, MAX_TURN_SPEED, 160, 5);
@@ -352,6 +280,6 @@ public class RedDoubleStoneArms extends LinearOpMode {
         sleep(300);
     }
     private void park(){
-        base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, PARKING_DISTANCE, 5);
+        base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, PARKING_DISTANCE, 5);
     }
 }
