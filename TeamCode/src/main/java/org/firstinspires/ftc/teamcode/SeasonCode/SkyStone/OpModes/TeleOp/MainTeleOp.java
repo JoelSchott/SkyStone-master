@@ -1,11 +1,17 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.TeleOp;
 
+import android.os.Environment;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 
 @TeleOp(name = "Main TeleOp", group = "TeleOp")
 public class MainTeleOp extends LinearOpMode {
@@ -51,6 +57,8 @@ public class MainTeleOp extends LinearOpMode {
         telemetry.update();
 
         base.arms.rightArm.setPosition(0.1);
+
+        setAngle();
 
         waitForStart();
 
@@ -275,7 +283,33 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addLine();
             telemetry.addData("left range is ", base.leftRange.customDistanceInInches());
             telemetry.addData("TOWER LEVEL IS ", towerLevel);
+            telemetry.addLine();
+            telemetry.addData("front distance ", base.frontRange.customDistanceInInches());
+            telemetry.addData("left distance is ", base.leftRange.customDistanceInInches());
+//            telemetry.addData("front right encoders are ", base.drivetrain.frontRight.getCurrentPosition());
+//            telemetry.addData("front left ", base.drivetrain.frontLeft.getCurrentPosition());
+//            telemetry.addData("back left ", base.drivetrain.backLeft.getCurrentPosition());
+//            telemetry.addData("back right ", base.drivetrain.backRight.getCurrentPosition());
             telemetry.update();
+
+        }
+    }
+
+    private void setAngle(){
+        try {
+            File file = new File(Environment.getExternalStorageDirectory(), "angle");
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line = br.readLine();
+            int angle = Integer.getInteger(line);
+            base.drivetrain.setInitalAngle(angle);
+            br.close();
+            telemetry.addData("Successfully set angle to ", angle);
+            telemetry.update();
+        }
+        catch(Exception e){
+            telemetry.addLine("problem with i/o");
+            telemetry.update();
+            e.printStackTrace();
         }
     }
 }

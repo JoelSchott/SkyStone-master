@@ -539,22 +539,43 @@ public class FourWheelMecanum extends RobotComponent {
             }
 
             double steer = Range.clip(error * 0.1, -1.0, 1.0);
-            if (forwardInches < 0){
-                steer *= -1.0;
-            }
 
-            double leftSpeed = speed - steer;
-            double rightSpeed = speed + steer;
-            double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+
+            double minusSteerSpeed = speed - steer;
+            double plusSteerSpeed = speed + steer;
+
+
+            double max = Math.max(Math.abs(minusSteerSpeed), Math.abs(plusSteerSpeed));
             if (max > 1.0){
-                leftSpeed /= max;
-                rightSpeed /= max;
+                minusSteerSpeed /= max;
+                plusSteerSpeed /= max;
             }
 
-            frontLeft.setPower(leftSpeed);
-            backLeft.setPower(leftSpeed);
-            frontRight.setPower(rightSpeed);
-            backRight.setPower(rightSpeed);
+            if (frontRight.getTargetPosition() > frontRight.getCurrentPosition()){
+                frontRight.setPower(plusSteerSpeed);
+            }
+            else{
+                frontRight.setPower(minusSteerSpeed);
+            }
+            if (backRight.getTargetPosition() > backRight.getCurrentPosition()){
+                backRight.setPower(plusSteerSpeed);
+            }
+            else{
+                backRight.setPower(minusSteerSpeed);
+            }
+
+            if (frontLeft.getTargetPosition() > frontLeft.getCurrentPosition()){
+                frontLeft.setPower(minusSteerSpeed);
+            }
+            else{
+                frontLeft.setPower(plusSteerSpeed);
+            }
+            if (backLeft.getTargetPosition() > backLeft.getCurrentPosition()){
+                backLeft.setPower(minusSteerSpeed);
+            }
+            else{
+                backLeft.setPower(plusSteerSpeed);
+            }
 
             double sumEncoderError = Math.abs(frontLeft.getCurrentPosition() - frontLeft.getTargetPosition())+
                     Math.abs(backLeft.getCurrentPosition() - backLeft.getTargetPosition()) +
@@ -570,7 +591,7 @@ public class FourWheelMecanum extends RobotComponent {
             base.getTelemetry().addData("Target",  "%7d:%7d",      frontLeftCounts,  frontRightCounts);
             base.getTelemetry().addData("Actual",  "%7d:%7d",      frontLeft.getCurrentPosition(),
                     frontRight.getCurrentPosition());
-            base.getTelemetry().addData("Speed",   "%5.2f:%5.2f",  leftSpeed, rightSpeed);
+            base.getTelemetry().addData("Speed",   "%5.2f:%5.2f",  minusSteerSpeed, plusSteerSpeed);
             base.getTelemetry().update();
 
         }

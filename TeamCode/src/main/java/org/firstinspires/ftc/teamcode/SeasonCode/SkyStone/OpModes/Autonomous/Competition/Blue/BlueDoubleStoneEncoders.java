@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.OpModes.Autonomous.Competition.Blue;
 
+import android.os.Environment;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -9,6 +11,10 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBaseWebcam;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.concurrent.RecursiveAction;
 
@@ -225,6 +231,25 @@ public class BlueDoubleStoneEncoders extends LinearOpMode {
         }
 
         base.drivetrain.setPowers(0);
+
+        writeAngle();
+    }
+
+    private void writeAngle(){
+        try{
+            File file = new File(Environment.getExternalStorageDirectory(), "angle");
+            FileOutputStream outputStream = new FileOutputStream(file);
+            PrintStream printStream = new PrintStream(outputStream);
+            printStream.flush();
+            printStream.println(base.gyro.heading());
+            printStream.close();
+            outputStream.close();
+        }
+        catch(Exception e){
+            telemetry.addLine("problem with i/o");
+            telemetry.update();
+            e.printStackTrace();
+        }
 
     }
 
