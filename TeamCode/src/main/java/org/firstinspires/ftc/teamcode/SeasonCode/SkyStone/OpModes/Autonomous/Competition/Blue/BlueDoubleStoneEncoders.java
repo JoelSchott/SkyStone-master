@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.Core.Utility.CustomPhoneCameraSkyStone;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.Components.Sky_Stone_Components.FourWheelMecanum;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBaseWebcam;
@@ -20,7 +21,7 @@ public class BlueDoubleStoneEncoders extends LinearOpMode {
     private final static double DRIVE_SPEED = 1.0;
     private static final double MAX_TURN_SPEED = 0.5;
     private final static double MINIMUM_TURN_SPEED = 0.1;
-    private final static double DISTANCE_ADJUSTMENT_SPEED = 0.09;
+    private final static double DISTANCE_ADJUSTMENT_SPEED = 0.1;
 
     private final static double FIRST_DISTANCE = 27.7;
     private final static double FIRST_LEFT_DISTANCE = 13.23;
@@ -51,15 +52,21 @@ public class BlueDoubleStoneEncoders extends LinearOpMode {
 
         base = new MainBaseWebcam(hardwareMap,telemetry,this);
         base.init();
+
         base.drivetrain.setInitalAngle(0);
+        int initialAngle = base.gyro.gyro.getIntegratedZValue();
 
         telemetry.clearAll();
         telemetry.addLine("May the Force be with us");
         telemetry.update();
 
-        waitForStart();
+        while (!opModeIsActive()){
+            telemetry.addData("front distance is ", base.frontRange.customDistanceInInches());
+            telemetry.update();
+        }
 
-        base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 13.5, 4);
+
+        base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 0, -13.5, initialAngle);
 
         base.getTelemetry().addData("front distance is " , base.frontRange.customDistanceInInches());
         base.getTelemetry().addData("left distance is ", base.leftRange.customDistanceInInches());
@@ -88,31 +95,24 @@ public class BlueDoubleStoneEncoders extends LinearOpMode {
         switch(position){
             case LEFT:
 
-                //drives back after seeing stones
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 7, 4);
-
-                //strafes left next to the stones
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 12, 6);
+                //drives back and left after seeing stones
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, -7, -12, initialAngle);
 
                 //drives to specific distance from both walls
-                //frontRangeDriveToDistance(LEFT_FIRST_DISTANCE_TO_WALL);
-
+                frontRangeDriveToDistance(LEFT_FIRST_DISTANCE_TO_WALL);
 
                 grabBlock();
 
                 //drive right to go to building zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 10, 4);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 0, 10, initialAngle);
 
                 //drive to other zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, LEFT_BRIDGE_DISTANCE, 6);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, -LEFT_BRIDGE_DISTANCE, 0, initialAngle);
 
                 releaseBlock();
 
                 //drives to second stone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, LEFT_BRIDGE_DISTANCE + 18, 8);
-
-                //drives left next to blocks
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 7, 5);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, LEFT_BRIDGE_DISTANCE + 18, -7, initialAngle);
 
                 //drives to distance from both walls
                 frontRangeDriveToDistance(LEFT_SECOND_DISTANCE_TO_WALL);
@@ -121,29 +121,24 @@ public class BlueDoubleStoneEncoders extends LinearOpMode {
                 grabBlock();
 
                 //drives right to go to building zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 10, 6);
-
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 0, 10, initialAngle);
 
                 //drives back to go to other zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, LEFT_BRIDGE_DISTANCE + 18, 8);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, -(LEFT_BRIDGE_DISTANCE + 18), 0, initialAngle);
 
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, MAX_TURN_SPEED, 20, 3);
 
                 releaseBlock();
 
                 //park
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 12, 5);
-
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 12, 0, base.gyro.gyro.getIntegratedZValue());
 
                 break;
 
             case MIDDLE:
 
                 //drives back after seeing stones
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 1, 4);
-
-                //strafes left next to the stones
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 12, 6);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, -1, -12, initialAngle);
 
                 //drives to specific distance from both walls
                 frontRangeDriveToDistance(MIDDLE_FIRST_DISTANCE_TO_WALL);
@@ -152,31 +147,27 @@ public class BlueDoubleStoneEncoders extends LinearOpMode {
                 grabBlock();
 
                 //drive right to go to building zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 10, 4);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 0, 10, initialAngle);
 
                 //drive to other zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, MIDDLE_BRIDGE_DISTANCE, 6);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, -MIDDLE_BRIDGE_DISTANCE, 0, initialAngle);
 
                 releaseBlock();
 
                 //drives to second stone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, MIDDLE_BRIDGE_DISTANCE + 18, 8);
-
-                //drives left next to blocks
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 8, 5);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, MIDDLE_BRIDGE_DISTANCE + 18, -8, initialAngle);
 
                 //drives to distance from both walls
                 frontRangeDriveToDistance(MIDDLE_SECOND_DISTANCE_TO_WALL);
                 leftRangeDriveToDistance(COLLECTING_DISTANCE);
 
-
                 grabBlock();
 
                 //drives right to go to building zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 10, 6);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 0, 10, initialAngle);
 
                 //drives back to go to other zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, MIDDLE_BRIDGE_DISTANCE + 17.5, 8);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, -(MIDDLE_BRIDGE_DISTANCE + 17.5), 0, initialAngle);
 
                 //turns to face parking location
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, MAX_TURN_SPEED, 20, 3);
@@ -184,17 +175,14 @@ public class BlueDoubleStoneEncoders extends LinearOpMode {
                 releaseBlock();
 
                 //park
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 12, 5);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 12, 0, base.gyro.gyro.getIntegratedZValue());
 
                 break;
 
             case RIGHT:
 
                 //drives forward after seeing stones
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 6, 4);
-
-                //strafes left next to the stones
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 12, 6);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 6, -12, initialAngle);
 
                 //drives to specific distance from both walls
                 frontRangeDriveToDistance(RIGHT_FIRST_DISTANCE_TO_WALL);
@@ -203,18 +191,15 @@ public class BlueDoubleStoneEncoders extends LinearOpMode {
                 grabBlock();
 
                 //drive right to go to building zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 10, 4);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 0, -10, initialAngle);
 
                 //drive to other zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, RIGHT_BRIDGE_DISTANCE, 6);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, -RIGHT_BRIDGE_DISTANCE, 0, initialAngle);
 
                 releaseBlock();
 
                 //drives to second stone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, RIGHT_BRIDGE_DISTANCE + 18, 8);
-
-                //drives left next to blocks
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 8, 5);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, RIGHT_BRIDGE_DISTANCE + 18, -8, initialAngle);
 
                 //drives to distance from both walls
                 frontRangeDriveToDistance(RIGHT_SECOND_DISTANCE_TO_WALL);
@@ -223,10 +208,10 @@ public class BlueDoubleStoneEncoders extends LinearOpMode {
                 grabBlock();
 
                 //drives right to go to building zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 8, 6);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 0, -8, initialAngle);
 
                 //drives back to go to other zone
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, RIGHT_BRIDGE_DISTANCE + 17, 8);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, -(RIGHT_BRIDGE_DISTANCE + 17), 0, initialAngle);
 
                 //turns to face parking location
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED, MAX_TURN_SPEED, 20 ,3);
@@ -234,44 +219,66 @@ public class BlueDoubleStoneEncoders extends LinearOpMode {
                 releaseBlock();
 
                 //park
-                base.drivetrain.straightEncoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, 13, 5);
+                base.drivetrain.gyroEncoderDrive(DRIVE_SPEED, 13, 0, base.gyro.gyro.getIntegratedZValue());
 
                 break;
         }
 
+        base.drivetrain.setPowers(0);
+
     }
 
     private void frontRangeDriveToDistance(double distance){
-        if (base.frontRange.customDistanceInInches() > distance){
-            while (base.frontRange.customDistanceInInches() > distance){
-                base.drivetrain.setPowers(DISTANCE_ADJUSTMENT_SPEED);
-            }
+        double error = Math.abs(base.frontRange.customDistanceInInches() - distance);
+        double buffer = 1.5;
+        if (base.frontRange.distance(DistanceUnit.INCH) < 0 || error > 20){
+            return;
         }
-        else if (base.frontRange.customDistanceInInches() < distance){
-            while (base.frontRange.customDistanceInInches() < distance){
-                base.drivetrain.setPowers(-DISTANCE_ADJUSTMENT_SPEED);
+        if (error > buffer){
+            if (base.frontRange.customDistanceInInches() > distance){
+                while (error > buffer){
+                    base.drivetrain.setPowers(DISTANCE_ADJUSTMENT_SPEED);
+                    error = Math.abs(base.frontRange.customDistanceInInches() - distance);
+                }
+            }
+            else if (base.frontRange.customDistanceInInches() < distance){
+                while (error > buffer){
+                    base.drivetrain.setPowers(-DISTANCE_ADJUSTMENT_SPEED);
+                    error =  Math.abs(base.frontRange.customDistanceInInches() - distance);
+                }
             }
         }
     }
 
     private void leftRangeDriveToDistance(double distance){
-//        if (base.leftRange.customDistanceInInches() > distance){
-//            while (base.leftRange.customDistanceInInches() > distance){
-//                base.drivetrain.frontRight.setPower(DISTANCE_ADJUSTMENT_SPEED);
-//                base.drivetrain.frontLeft.setPower(-DISTANCE_ADJUSTMENT_SPEED);
-//                base.drivetrain.backLeft.setPower(DISTANCE_ADJUSTMENT_SPEED);
-//                base.drivetrain.backRight.setPower(-DISTANCE_ADJUSTMENT_SPEED);
-//            }
-//        }
-//        else if (base.leftRange.customDistanceInInches() < distance){
-//            while (base.leftRange.customDistanceInInches() < distance){
-//                base.drivetrain.frontRight.setPower(-DISTANCE_ADJUSTMENT_SPEED);
-//                base.drivetrain.frontLeft.setPower(DISTANCE_ADJUSTMENT_SPEED);
-//                base.drivetrain.backLeft.setPower(-DISTANCE_ADJUSTMENT_SPEED);
-//                base.drivetrain.backRight.setPower(DISTANCE_ADJUSTMENT_SPEED);
-//            }
-//        }
+        double error = Math.abs(base.leftRange.customDistanceInInches() - distance);
+        double buffer = 1.5;
+        if (base.leftRange.distance(DistanceUnit.INCH) < 0 || error > 20){
+            return;
+        }
+        if (error > buffer){
+            if (base.leftRange.customDistanceInInches() > distance){
+                while (error > buffer){
+                    base.drivetrain.frontRight.setPower(DISTANCE_ADJUSTMENT_SPEED);
+                    base.drivetrain.frontLeft.setPower(-DISTANCE_ADJUSTMENT_SPEED);
+                    base.drivetrain.backLeft.setPower(DISTANCE_ADJUSTMENT_SPEED);
+                    base.drivetrain.backRight.setPower(-DISTANCE_ADJUSTMENT_SPEED);
+                    error = Math.abs(base.leftRange.customDistanceInInches() - distance);
+                }
+            }
+            else if (base.leftRange.customDistanceInInches() < distance){
+                while (error > buffer){
+                    base.drivetrain.frontRight.setPower(-DISTANCE_ADJUSTMENT_SPEED);
+                    base.drivetrain.frontLeft.setPower(DISTANCE_ADJUSTMENT_SPEED);
+                    base.drivetrain.backLeft.setPower(-DISTANCE_ADJUSTMENT_SPEED);
+                    base.drivetrain.backRight.setPower(DISTANCE_ADJUSTMENT_SPEED);
+                    error =  Math.abs(base.leftRange.customDistanceInInches() - distance);
+                }
+            }
+        }
     }
+
+
 
     private void grabBlock(){
         base.arms.setLeftPower(1);

@@ -102,6 +102,15 @@ public class CustomPhoneCameraSkyStone {
         if (stones == null){
             return SkyStonePosition.UNKNOWN;
         }
+        for (Recognition stone : stones){
+            double midPoint = (stone.getLeft() + stone.getRight())/2.0;
+            if (stone.getLabel().equals("Skystone") && stone.getConfidence() > 0.73 && midPoint > 320){
+                return SkyStonePosition.RIGHT;
+            }
+            else if (stone.getLabel().equals("Skystone") && stone.getConfidence() > 0.73 && midPoint < 320){
+                return SkyStonePosition.MIDDLE;
+            }
+        }
         if (stones.size() < 2){
             return SkyStonePosition.UNKNOWN;
         }

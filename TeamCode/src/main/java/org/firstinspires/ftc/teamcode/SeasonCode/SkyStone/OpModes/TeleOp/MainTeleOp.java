@@ -273,6 +273,7 @@ public class MainTeleOp extends LinearOpMode {
             telemetry.addData("DRIVE STATE :", driveState);
             telemetry.addData("DRIVE MODE :", driveMode);
             telemetry.addLine();
+            telemetry.addData("left range is ", base.leftRange.customDistanceInInches());
             telemetry.addData("TOWER LEVEL IS ", towerLevel);
             telemetry.update();
         }

@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBase1Webcam;
 import org.firstinspires.ftc.teamcode.SeasonCode.SkyStone.MainBaseWebcam;
 
-//@Autonomous(name = "Webcam Image Analysis ", group = "Autonomous")
+@Autonomous(name = "Webcam Image Analysis ", group = "Autonomous")
 public class WebcamImageAnalysis extends LinearOpMode {
 
     private static final String VUFORIA_KEY =

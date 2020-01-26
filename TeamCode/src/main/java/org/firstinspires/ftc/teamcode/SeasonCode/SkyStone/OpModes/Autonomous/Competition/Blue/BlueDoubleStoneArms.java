@@ -21,7 +21,7 @@ public class BlueDoubleStoneArms extends LinearOpMode {
     private final static double MINIMUM_TURN_SPEED = 0.1;
     private final static double DISTANCE_ADJUSTMENT_SPEED = 0.09;
 
-    private final static double FIRST_DISTANCE = 27.7;
+    private final static double FIRST_DISTANCE = 29.2;
     private final static double FIRST_LEFT_DISTANCE = 13.23;
     private static final double COLLECTING_DISTANCE = 3.11;
 
@@ -32,7 +32,7 @@ public class BlueDoubleStoneArms extends LinearOpMode {
     private static final double RIGHT_FIRST_DISTANCE_TO_WALL = 22.2;
     private static final double RIGHT_SECOND_DISTANCE_TO_WALL = 1.71;
 
-    private static final double MIDDLE_FIRST_DISTANCE_TO_WALL = 29.2;
+    private static final double MIDDLE_FIRST_DISTANCE_TO_WALL = 28.8;
     private static final double MIDDLE_SECOND_DISTANCE_TO_WALL = 9;
 
     private static final double LEFT_FIRST_DISTANCE_TO_WALL = 35.64;
@@ -71,7 +71,7 @@ public class BlueDoubleStoneArms extends LinearOpMode {
 
         base.drivetrain.setPowers(0);
 
-        sleep(500);
+        sleep(800);
 
         List<Recognition> stones = base.webcam.getObjects();
         position = CustomPhoneCameraSkyStone.BLUETwoStonesGetPosition(stones);
@@ -90,7 +90,7 @@ public class BlueDoubleStoneArms extends LinearOpMode {
             case LEFT:
 
                 //drives back after seeing stones
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 7, 4);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.BACK, 6.5, 4);
 
                 //strafes left next to the stones
                 base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 12, 6);
@@ -121,13 +121,13 @@ public class BlueDoubleStoneArms extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 0, 2);
 
                 //drives to second stone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, LEFT_BRIDGE_DISTANCE + 18, 8);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.FORWARD, LEFT_BRIDGE_DISTANCE + 17.5, 8);
 
                 //rotates to initial angle
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 0, 2);
 
                 //drives left next to blocks
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 7, 5);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 9, 5);
 
                 //rotates to initial angle
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 0, 2);
@@ -201,7 +201,7 @@ public class BlueDoubleStoneArms extends LinearOpMode {
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 0, 2);
 
                 //drives left next to blocks
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 8, 5);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.LEFT, 8.7, 5);
 
                 //rotates to initial angle
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 0, 2);
@@ -290,7 +290,7 @@ public class BlueDoubleStoneArms extends LinearOpMode {
                 grabBlock();
 
                 //drives right to go to building zone
-                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 8, 6);
+                base.drivetrain.encoderDrive(DRIVE_SPEED, FourWheelMecanum.Direction.RIGHT, 9.5, 6);
 
                 //rotates to initial angle
                 base.drivetrain.gyroTurn(MINIMUM_TURN_SPEED,MAX_TURN_SPEED, 0, 2);

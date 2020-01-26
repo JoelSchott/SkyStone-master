@@ -9,16 +9,17 @@ import org.firstinspires.ftc.robotcore.internal.android.dex.Code;
 
 public class MRGyro extends RobotSensor {
 
-    public GyroSensor gyro;
+    public ModernRoboticsI2cGyro gyro;
 
     public MRGyro(RobotBase base, String name){
         super(base, name);
-        gyro = base().getMapper().mapMRGyro(name);
+        gyro = (ModernRoboticsI2cGyro) (base().getMapper().mapMRGyro(name));
         gyro.calibrate();
         while (gyro.isCalibrating()){
             base.getTelemetry().addLine("Calibrating Gyro...");
             base.getTelemetry().update();
         }
+        gyro.resetZAxisIntegrator();
     }
 
     public int heading(){
